@@ -37,7 +37,7 @@ function eteam_send_mail(string $subject, string $body_html, string $reply_to_em
         }
     }
 
-    if ($phpmailer_loaded && class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
+    if ($phpmailer_loaded && class_exists('PHPMailer\\PHPMailer\\PHPMailer') && !empty($cfg['smtp_host'])) {
         // SMTP via PHPMailer
         $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
         try {

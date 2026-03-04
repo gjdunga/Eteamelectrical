@@ -1,16 +1,23 @@
 <?php
-// SMTP Configuration for E Team Electrical contact form
-// Copy this file to mail-config.php and fill in your SMTP credentials.
-// Do NOT commit mail-config.php to git (it contains passwords).
+// E Team Electrical mail configuration
+// Copy this file to mail-config.php: cp mail-config.sample.php mail-config.php
+//
+// SMTP fields are optional. If left empty, PHP mail() is used (works on most hosts).
+// For SMTP (more reliable), install PHPMailer: composer require phpmailer/phpmailer
 
 return [
-    'smtp_host'   => 'smtp.example.com',     // e.g. 'smtp.gmail.com', 'mail.yourdomain.com'
-    'smtp_port'   => 587,                     // 587 for TLS, 465 for SSL
-    'smtp_user'   => 'you@example.com',       // SMTP login username
-    'smtp_pass'   => 'your-app-password',     // SMTP password or app-specific password
-    'smtp_secure' => 'tls',                   // 'tls' or 'ssl'
+    // Where contact form emails are sent
+    'to_email'    => 'Djstatzz@gmail.com',
+    'to_name'     => 'E Team Electrical',
+
+    // From address (should match your domain for deliverability)
     'from_email'  => 'noreply@eteamelectrical.com',
     'from_name'   => 'E Team Electrical Website',
-    'to_email'    => 'your-email@example.com', // Where contact form submissions go
-    'to_name'     => 'E Team Electrical',
+
+    // SMTP settings (leave empty to use PHP mail() instead)
+    'smtp_host'   => '',        // e.g. 'smtp.gmail.com' or 'mail.eteamelectrical.com'
+    'smtp_port'   => 587,       // 587 for TLS, 465 for SSL
+    'smtp_user'   => '',        // SMTP login
+    'smtp_pass'   => '',        // SMTP password or app password
+    'smtp_secure' => 'tls',     // 'tls' or 'ssl'
 ];

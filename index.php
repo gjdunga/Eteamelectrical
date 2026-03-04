@@ -276,7 +276,7 @@ include 'includes/header.php';
                     <div class="contact-item-icon">&#128231;</div>
                     <div>
                         <div class="contact-item-label">Email</div>
-                        <div class="contact-item-value"><a href="mailto:contact@eteamelectrical.com">contact@eteamelectrical.com</a></div>
+                        <div class="contact-item-value"><a href="mailto:Djstatzz@gmail.com">Djstatzz@gmail.com</a></div>
                     </div>
                 </div>
                 <div class="contact-item">
