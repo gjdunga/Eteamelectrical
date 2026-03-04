@@ -11,7 +11,7 @@ return [
     'to_name'     => 'E Team Electrical',
 
     // From address (should match your domain for deliverability)
-    'from_email'  => 'noreply@eteamelectrical.com',
+    'from_email'  => 'contacts@eteamelectrical.com',
     'from_name'   => 'E Team Electrical Website',
 
     // SMTP settings (leave empty to use PHP mail() instead)
