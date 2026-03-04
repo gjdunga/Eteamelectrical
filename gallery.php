@@ -4,11 +4,13 @@ $body_class = 'page-gallery';
 
 // Directory labels
 $dir_labels = [
-    'AE'    => 'Automotive & Equipment',
     'CIMSP' => 'Commercial / Industrial',
     'CLFSRP'=> 'Concrete, Landscape & Foundation',
     'FHRBAP'=> 'Framing, Handyman, Remodel & Build',
 ];
+
+// Directories to skip (client does not offer these services)
+$skip_dirs = ['AE'];
 
 // Supported file extensions
 $image_exts = ['jpg','jpeg','png','gif','webp'];
@@ -23,6 +25,7 @@ if (is_dir($photos_root)) {
     foreach ($dirs as $dir) {
         $full = $photos_root . '/' . $dir;
         if (!is_dir($full)) continue;
+        if (in_array($dir, $skip_dirs)) continue;
         $files = array_diff(scandir($full), ['.', '..', '.notafile', '.NotaFile']);
         $media = [];
         foreach ($files as $f) {
@@ -78,14 +81,14 @@ include 'includes/header.php';
                 <?php foreach ($g['media'] as $m): ?>
                     <?php if ($m['type'] === 'video'): ?>
                         <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="video" data-src="<?php echo htmlspecialchars($m['path']); ?>" style="cursor:pointer">
-                            <video class="tile-media" muted preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-                                <source src="<?php echo htmlspecialchars($m['path']); ?>">
+                            <video class="tile-media-video" muted preload="metadata" playsinline>
+                                <source src="<?php echo htmlspecialchars($m['path']); ?>#t=0.5">
                             </video>
                             <div class="tile-play"><span>&#9654;</span></div>
                         </div>
                     <?php else: ?>
                         <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="image" data-src="<?php echo htmlspecialchars($m['path']); ?>" style="cursor:pointer">
-                            <div class="tile-media" style="background-image:url(<?php echo htmlspecialchars($m['path']); ?>)"></div>
+                            <img class="tile-media-img" src="<?php echo htmlspecialchars($m['path']); ?>" alt="Project photo" loading="lazy">
                         </div>
                     <?php endif; ?>
                     <?php $global_index++; ?>
@@ -114,23 +117,36 @@ include 'includes/header.php';
     var current = 0;
     var total = items.length;
 
+    function stopMedia() {
+        var vids = content.querySelectorAll('video');
+        vids.forEach(function(v) { v.pause(); v.src = ''; });
+        content.innerHTML = '';
+    }
+
     function show(idx) {
+        if (total === 0) return;
         if (idx < 0) idx = total - 1;
         if (idx >= total) idx = 0;
         current = idx;
+        stopMedia();
         var el = items[idx];
         var type = el.getAttribute('data-type');
         var src  = el.getAttribute('data-src');
-        content.innerHTML = '';
         if (type === 'video') {
             var v = document.createElement('video');
-            v.src = src; v.controls = true; v.autoplay = true;
-            v.style.maxWidth = '92vw'; v.style.maxHeight = '90vh';
+            v.src = src;
+            v.controls = true;
+            v.autoplay = true;
+            v.playsInline = true;
+            v.style.maxWidth = '92vw';
+            v.style.maxHeight = '90vh';
             v.style.borderRadius = '16px';
+            v.style.background = '#000';
             content.appendChild(v);
         } else {
             var img = document.createElement('img');
-            img.src = src; img.alt = 'Project photo';
+            img.src = src;
+            img.alt = 'Project photo';
             content.appendChild(img);
         }
         overlay.classList.add('active');
@@ -138,8 +154,8 @@ include 'includes/header.php';
     }
 
     function hide() {
+        stopMedia();
         overlay.classList.remove('active');
-        content.innerHTML = '';
         document.body.style.overflow = '';
     }
 

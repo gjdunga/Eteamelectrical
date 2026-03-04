@@ -76,8 +76,8 @@ include 'includes/header.php';
         <section class="eteam-gallery-grid">
             <div class="tiles">
                 <?php
-                // Show a preview of gallery photos (first 6)
-                $photo_dirs = ['AE', 'CIMSP', 'CLFSRP'];
+                // Show a preview of gallery photos (first 6, skip AE)
+                $photo_dirs = ['CIMSP', 'CLFSRP'];
                 $preview_count = 0;
                 $max_preview = 6;
                 foreach ($photo_dirs as $dir) {
@@ -92,8 +92,8 @@ include 'includes/header.php';
                         if (in_array($ext, ['mp4','mov','webm'])) {
                             ?>
                             <a class="tile" href="gallery.php">
-                                <video class="tile-media" muted preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-                                    <source src="<?php echo htmlspecialchars($src); ?>">
+                                <video class="tile-media-video" muted preload="metadata" playsinline>
+                                    <source src="<?php echo htmlspecialchars($src); ?>#t=0.5">
                                 </video>
                                 <div class="tile-play"><span>&#9654;</span></div>
                             </a>
@@ -101,7 +101,7 @@ include 'includes/header.php';
                         } else {
                             ?>
                             <a class="tile" href="gallery.php" style="background:var(--card)">
-                                <div class="tile-media" style="background-image:url(<?php echo htmlspecialchars($src); ?>)"></div>
+                                <img class="tile-media-img" src="<?php echo htmlspecialchars($src); ?>" alt="Project photo" loading="lazy">
                             </a>
                             <?php
                         }

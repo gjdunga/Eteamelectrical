@@ -9,7 +9,7 @@
 /* Lightbox overlay for gallery */
 .lightbox-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out}
 .lightbox-overlay.active{display:flex}
-.lightbox-overlay img,.lightbox-overlay video{max-width:92vw;max-height:90vh;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.lightbox-overlay img,.lightbox-overlay video{max-width:92vw;max-height:90vh;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.7);image-orientation:from-image}
 .lightbox-close{position:fixed;top:18px;right:24px;color:#fff;font-size:2rem;cursor:pointer;z-index:10000;background:rgba(0,0,0,.5);border:none;border-radius:999px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
 .lightbox-nav{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font-size:2.4rem;cursor:pointer;z-index:10000;background:rgba(0,0,0,.4);border:none;border-radius:999px;width:52px;height:52px;display:flex;align-items:center;justify-content:center}
 .lightbox-nav.prev{left:18px}
