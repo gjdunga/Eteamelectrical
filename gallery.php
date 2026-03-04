@@ -4,13 +4,11 @@ $body_class = 'page-gallery';
 
 // Directory labels
 $dir_labels = [
+    'AE'    => 'General Work',
     'CIMSP' => 'Commercial / Industrial',
     'CLFSRP'=> 'Concrete, Landscape & Foundation',
     'FHRBAP'=> 'Framing, Handyman, Remodel & Build',
 ];
-
-// Directories to skip (client does not offer these services)
-$skip_dirs = ['AE'];
 
 // Supported file extensions
 $image_exts = ['jpg','jpeg','png','gif','webp'];
@@ -25,7 +23,6 @@ if (is_dir($photos_root)) {
     foreach ($dirs as $dir) {
         $full = $photos_root . '/' . $dir;
         if (!is_dir($full)) continue;
-        if (in_array($dir, $skip_dirs)) continue;
         $files = array_diff(scandir($full), ['.', '..', '.notafile', '.NotaFile']);
         $media = [];
         foreach ($files as $f) {
@@ -50,11 +47,38 @@ if (is_dir($photos_root)) {
 include 'includes/header.php';
 ?>
 
-<section class="storm-header">
-    <div class="storm-bg" aria-hidden="true"></div>
+<?php
+// Collect all image paths for the header slideshow
+$slideshow_images = [];
+foreach ($galleries as $key => $g) {
+    foreach ($g['media'] as $m) {
+        if ($m['type'] === 'image') {
+            $slideshow_images[] = $m['path'];
+        }
+    }
+}
+?>
+
+<section class="storm-header slideshow-header">
+    <div class="slideshow-bg" aria-hidden="true">
+        <?php foreach ($slideshow_images as $i => $src): ?>
+        <img class="slideshow-img<?php echo $i === 0 ? ' active' : ''; ?>"
+             src="<?php echo htmlspecialchars($src); ?>"
+             alt="" loading="<?php echo $i < 2 ? 'eager' : 'lazy'; ?>">
+        <?php endforeach; ?>
+        <div class="slideshow-overlay"></div>
+    </div>
     <div class="container storm-inner">
         <h1 class="storm-title">Our Work</h1>
         <p class="storm-subtitle">Photos and videos from recent projects. Click any image to view full size.</p>
+        <?php if (count($slideshow_images) > 1): ?>
+        <div class="slideshow-controls">
+            <button class="slideshow-btn" id="slideshow-prev" aria-label="Previous">&#8249;</button>
+            <span class="slideshow-counter"><span id="slideshow-current">1</span> / <?php echo count($slideshow_images); ?></span>
+            <button class="slideshow-btn" id="slideshow-next" aria-label="Next">&#8250;</button>
+            <button class="slideshow-btn" id="slideshow-pause" aria-label="Pause slideshow">&#10074;&#10074;</button>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -196,5 +220,54 @@ include 'includes/header.php';
     });
 })();
 </script>
+
+<?php if (count($slideshow_images) > 1): ?>
+<script>
+(function() {
+    var imgs = document.querySelectorAll('.slideshow-img');
+    var counter = document.getElementById('slideshow-current');
+    var total = imgs.length;
+    var current = 0;
+    var paused = false;
+    var interval = null;
+    var DELAY = 5000;
+
+    function showSlide(idx) {
+        if (idx < 0) idx = total - 1;
+        if (idx >= total) idx = 0;
+        imgs[current].classList.remove('active');
+        current = idx;
+        imgs[current].classList.add('active');
+        if (counter) counter.textContent = current + 1;
+    }
+
+    function next() { showSlide(current + 1); }
+    function prev() { showSlide(current - 1); }
+
+    function startTimer() {
+        stopTimer();
+        interval = setInterval(next, DELAY);
+    }
+    function stopTimer() {
+        if (interval) { clearInterval(interval); interval = null; }
+    }
+
+    var btnPrev = document.getElementById('slideshow-prev');
+    var btnNext = document.getElementById('slideshow-next');
+    var btnPause = document.getElementById('slideshow-pause');
+
+    if (btnPrev) btnPrev.addEventListener('click', function() { prev(); if (!paused) startTimer(); });
+    if (btnNext) btnNext.addEventListener('click', function() { next(); if (!paused) startTimer(); });
+    if (btnPause) btnPause.addEventListener('click', function() {
+        paused = !paused;
+        btnPause.innerHTML = paused ? '&#9654;' : '&#10074;&#10074;';
+        btnPause.setAttribute('aria-label', paused ? 'Play slideshow' : 'Pause slideshow');
+        if (paused) stopTimer(); else startTimer();
+    });
+
+    startTimer();
+})();
+</script>
+<?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>

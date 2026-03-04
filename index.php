@@ -76,8 +76,8 @@ include 'includes/header.php';
         <section class="eteam-gallery-grid">
             <div class="tiles">
                 <?php
-                // Show a preview of gallery photos (first 6, skip AE)
-                $photo_dirs = ['CIMSP', 'CLFSRP'];
+                // Show a preview of gallery photos (first 6)
+                $photo_dirs = ['AE', 'CIMSP', 'CLFSRP'];
                 $preview_count = 0;
                 $max_preview = 6;
                 foreach ($photo_dirs as $dir) {

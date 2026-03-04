@@ -197,6 +197,18 @@ img{max-width:100%;height:auto}
 .storm-title{margin:0;font-size: clamp(2.2rem, 4.4vw, 3.4rem);text-shadow:0 10px 30px rgba(0,0,0,.55)}
 .storm-subtitle{margin:8px 0 0;color:rgba(233,238,246,.88);max-width:60ch}
 
+/* Slideshow header */
+.slideshow-header{position:relative;overflow:hidden;min-height:340px;border-bottom:1px solid var(--line)}
+.slideshow-bg{position:absolute;inset:0}
+.slideshow-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-orientation:from-image;opacity:0;transition:opacity 1.2s ease;filter:contrast(1.1) saturate(1.1)}
+.slideshow-img.active{opacity:1}
+.slideshow-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(11,15,22,.45) 0%, rgba(11,15,22,.82) 100%);z-index:1}
+.slideshow-header .storm-inner{position:relative;z-index:2}
+.slideshow-controls{display:flex;align-items:center;gap:10px;margin-top:14px}
+.slideshow-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:999px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:background .2s ease}
+.slideshow-btn:hover{background:rgba(255,210,74,.25);border-color:var(--accent)}
+.slideshow-counter{color:var(--muted);font-size:.9rem;font-family:var(--mono);min-width:60px;text-align:center}
+
 /* Footer */
 .site-footer{border-top:1px solid var(--line);background:rgba(11,15,22,.82)}
 .footer-inner{padding:28px 0}
