@@ -4,10 +4,19 @@ $body_class = 'page-gallery';
 
 // Directory labels
 $dir_labels = [
-    'AE'    => 'General Work',
-    'CIMSP' => 'Commercial / Industrial',
-    'CLFSRP'=> 'Concrete, Landscape & Foundation',
-    'FHRBAP'=> 'Framing, Handyman, Remodel & Build',
+    'AE'      => 'AE',
+    'CIMSP'   => 'CIMSP',
+    'CLFSRP'  => 'CLFSRP',
+    'FHRBAP'  => 'FHRBAP',
+    'FYSIL'   => 'FYSIL',
+    'HTICLD'  => 'HTICLD',
+    'IPLCCI'  => 'IPLCCI',
+    'IPPM'    => 'IPPM',
+    'OFSI'    => 'OFSI',
+    'OGDROR'  => 'OGDROR',
+    'SIMHWHF' => 'SIMHWHF',
+    'TSRNL'   => 'TSRNL',
+    'UTA'     => 'UTA',
 ];
 
 // Supported file extensions

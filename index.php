@@ -77,7 +77,7 @@ include 'includes/header.php';
             <div class="tiles">
                 <?php
                 // Show a preview of gallery photos (first 6)
-                $photo_dirs = ['AE', 'CIMSP', 'CLFSRP'];
+                $photo_dirs = ['AE', 'CIMSP', 'CLFSRP', 'FHRBAP', 'FYSIL', 'HTICLD', 'IPLCCI', 'IPPM', 'OFSI', 'OGDROR', 'SIMHWHF', 'TSRNL', 'UTA'];
                 $preview_count = 0;
                 $max_preview = 6;
                 foreach ($photo_dirs as $dir) {
