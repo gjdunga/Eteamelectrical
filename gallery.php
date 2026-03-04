@@ -108,8 +108,8 @@ include 'includes/header.php';
                     <?php foreach ($g['media'] as $m): ?>
                         <?php if ($m['type'] === 'video'): ?>
                             <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="video" data-src="<?php echo htmlspecialchars($m['path']); ?>">
-                                <video class="tile-media-video" muted preload="metadata" playsinline>
-                                    <source src="<?php echo htmlspecialchars($m['path']); ?>#t=0.5">
+                                <video class="tile-media-video" muted loop playsinline preload="metadata" data-autoscroll>
+                                    <source src="<?php echo htmlspecialchars($m['path']); ?>#t=0.5" type="video/<?php echo pathinfo($m['path'], PATHINFO_EXTENSION) === 'mov' ? 'quicktime' : 'mp4'; ?>">
                                 </video>
                                 <div class="tile-play"><span>&#9654;</span></div>
                             </div>
@@ -221,6 +221,27 @@ include 'includes/header.php';
             });
         });
     });
+
+    // Autoplay videos on scroll into view, pause on scroll out
+    var autoVideos = document.querySelectorAll('video[data-autoscroll]');
+    if (autoVideos.length > 0 && 'IntersectionObserver' in window) {
+        var videoObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                var vid = entry.target;
+                var playBtn = vid.parentElement.querySelector('.tile-play');
+                if (entry.isIntersecting) {
+                    vid.play().then(function() {
+                        if (playBtn) playBtn.classList.add('playing');
+                    }).catch(function() {});
+                } else {
+                    vid.pause();
+                    if (playBtn) playBtn.classList.remove('playing');
+                }
+            });
+        }, { threshold: 0.4 });
+
+        autoVideos.forEach(function(v) { videoObserver.observe(v); });
+    }
 })();
 </script>
 
