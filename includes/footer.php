@@ -2,11 +2,8 @@
 
 <footer class="site-footer">
     <div class="container footer-inner">
-        <div class="footer-brand">
-            <strong>E Team Electrical</strong>
-            <span class="muted">&copy; <?php echo date('Y'); ?></span>
-        </div>
-        <nav class="footer-nav" aria-label="Footer Menu">
+        <div class="footer-brand">E Team Electrical</div>
+        <nav class="footer-nav">
             <ul class="menu">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="gallery.php">Gallery</a></li>
@@ -15,7 +12,7 @@
             </ul>
         </nav>
         <div class="footer-legal">
-            Serving all of Colorado &bull; Licensed &amp; Insured
+            &copy; <?php echo date('Y'); ?> E Team Electrical &bull; Serving All of Colorado &bull; Licensed &amp; Insured
         </div>
     </div>
 </footer>

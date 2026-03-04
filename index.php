@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/mail.php';
 
-// Handle contact form
 $form_submitted = false;
 $form_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_contact'])) {
@@ -19,59 +18,121 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_contact'])) {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $form_error = 'Please enter a valid email address.';
     } else {
-        $body = "<h2>New Quote Request from eteamelectrical.com</h2>";
+        $body = "<h2>New Quote Request</h2>";
         $body .= "<p><strong>Name:</strong> " . htmlspecialchars($name) . "</p>";
         $body .= "<p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>";
         $body .= "<p><strong>Phone:</strong> " . htmlspecialchars($phone ?: 'Not provided') . "</p>";
         $body .= "<p><strong>Service:</strong> " . htmlspecialchars($service ?: 'Not specified') . "</p>";
         $body .= "<p><strong>Message:</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>";
-        $body .= "<hr><p style='color:#888;font-size:12px'>Sent from E Team Electrical website contact form</p>";
 
-        $result = eteam_send_mail(
-            "Quote Request: " . $name,
-            $body,
-            $email,
-            $name
-        );
-
+        $result = eteam_send_mail("Quote Request: " . $name, $body, $email, $name);
         if ($result['success']) {
             $form_submitted = true;
         } else {
-            $form_error = 'Could not send your message right now. Please call or email us directly.';
+            $form_error = 'Could not send your message. Please call or email us directly.';
         }
     }
 }
 
 include 'includes/header.php';
+
+// Grab a hero image from FHRBAP if available
+$hero_img = '';
+$hero_dir = __DIR__ . '/photos/FHRBAP';
+if (is_dir($hero_dir)) {
+    $imgs = glob($hero_dir . '/*.{jpg,jpeg,png}', GLOB_BRACE);
+    if (!empty($imgs)) $hero_img = 'photos/FHRBAP/' . basename($imgs[array_rand($imgs)]);
+}
 ?>
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <?php if ($hero_img): ?>
+    <div class="hero-photo"><img src="<?php echo htmlspecialchars($hero_img); ?>" alt="E Team project photo"></div>
+    <?php endif; ?>
     <div class="container hero-inner">
-        <div class="hero-copy">
-            <div class="hero-badge">Serving All of Colorado</div>
-            <h1 class="hero-title">Built Right.<br><span class="highlight">Every Time.</span></h1>
-            <p class="hero-lede">Journeyman electrician, general contractor, and skilled handyman. From panel upgrades to full remodels, one call gets the whole job done.</p>
-            <div class="hero-actions">
-                <a class="btn btn-primary" href="#contact">Get a Quote</a>
-                <a class="btn btn-outline" href="gallery.php">See Our Work</a>
+        <div class="hero-overline reveal">Journeyman Electrician &bull; General Contractor</div>
+        <h1 class="hero-title reveal reveal-delay-1">Built Right.<br><span class="stroke">Every Time.</span></h1>
+        <p class="hero-lede reveal reveal-delay-2">Multi-trade contracting crew serving all of Colorado. Electrical, construction, concrete, demolition, plumbing, and handyman work, all under one call.</p>
+        <div class="hero-actions reveal reveal-delay-3">
+            <a class="btn btn-fill" href="#contact">Get a Quote</a>
+            <a class="btn btn-inv" href="gallery.php">See Our Work</a>
+        </div>
+    </div>
+    <div class="hero-ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <span>Electrical &bull; Panel Upgrades &bull; Rewiring &bull; Construction &bull; Framing &bull; Concrete &bull; Foundations &bull; Demolition &bull; Handyman &bull; Plumbing &bull; Remodels &bull; Retaining Walls &bull; Driveways &bull; Code Corrections &bull; Serving All of Colorado &bull;&nbsp;</span>
+            <span>Electrical &bull; Panel Upgrades &bull; Rewiring &bull; Construction &bull; Framing &bull; Concrete &bull; Foundations &bull; Demolition &bull; Handyman &bull; Plumbing &bull; Remodels &bull; Retaining Walls &bull; Driveways &bull; Code Corrections &bull; Serving All of Colorado &bull;&nbsp;</span>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section section-slab">
+    <div class="container">
+        <div class="section-label reveal">What We Do</div>
+        <h2 class="section-title reveal reveal-delay-1">Our Services</h2>
+        <p class="section-desc reveal reveal-delay-2">One crew, every trade. No juggling subcontractors or finger-pointing between teams.</p>
+
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-num">01</div>
+                <div class="service-bar"></div>
+                <h3>Electrical</h3>
+                <p>Panel upgrades, new circuits, rewires, lighting installs, troubleshooting, and code corrections. Journeyman electrician on every job.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-1">
+                <div class="service-num">02</div>
+                <div class="service-bar"></div>
+                <h3>General Construction</h3>
+                <p>New builds, additions, framing, structural repairs, and full project management from permits through punch list.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-2">
+                <div class="service-num">03</div>
+                <div class="service-bar"></div>
+                <h3>Handyman</h3>
+                <p>Small jobs, odd fixes, mounting, patching, door and window installs, drywall. No job too small.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-3">
+                <div class="service-num">04</div>
+                <div class="service-bar"></div>
+                <h3>Concrete</h3>
+                <p>Foundations, slabs, sidewalks, driveways, retaining walls. Graded for drainage, finished clean.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-4">
+                <div class="service-num">05</div>
+                <div class="service-bar"></div>
+                <h3>Demolition &amp; Dirt Work</h3>
+                <p>Controlled teardowns, interior gut jobs, site clearing, grading, trenching, and backfill.</p>
+            </div>
+            <div class="service-card reveal reveal-delay-5">
+                <div class="service-num">06</div>
+                <div class="service-bar"></div>
+                <h3>Plumbing</h3>
+                <p>Fixture installs, pipe repair, water heaters, drain work, rough-in for new construction and remodels.</p>
             </div>
         </div>
-        <div class="hero-stats">
-            <div class="stat-card">
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="section-dark">
+    <div class="container">
+        <div class="stats-strip reveal">
+            <div class="stat">
                 <div class="stat-num">8+</div>
                 <div class="stat-label">Years Experience</div>
             </div>
-            <div class="stat-card">
+            <div class="stat">
                 <div class="stat-num">450+</div>
                 <div class="stat-label">Jobs Completed</div>
             </div>
-            <div class="stat-card">
+            <div class="stat">
                 <div class="stat-num">CO</div>
-                <div class="stat-label">Statewide</div>
+                <div class="stat-label">Statewide Service</div>
             </div>
-            <div class="stat-card">
+            <div class="stat">
                 <div class="stat-num">100%</div>
                 <div class="stat-label">Licensed &amp; Insured</div>
             </div>
@@ -79,170 +140,102 @@ include 'includes/header.php';
     </div>
 </section>
 
-<!-- SERVICES -->
-<section class="section section-dark">
-    <div class="container">
-        <div class="section-header">
-            <div class="section-label">What We Do</div>
-            <h2 class="section-title">Our Services</h2>
-            <p class="section-subtitle">Multi-trade capabilities under one crew. No juggling subcontractors, no finger-pointing between trades.</p>
-        </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">&#9889;</div>
-                <h3>Electrical</h3>
-                <p>Panel upgrades, new circuits, rewires, lighting, troubleshooting, and code corrections. Journeyman electrician on every job.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">&#9960;</div>
-                <h3>General Construction</h3>
-                <p>New builds, additions, framing, structural repairs, and full project management from permits to punch list.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">&#9874;</div>
-                <h3>Handyman</h3>
-                <p>Small jobs, odd fixes, mounting, patching, door and window installs, drywall, and everything in between. No job too small.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">&#9638;</div>
-                <h3>Concrete</h3>
-                <p>Foundations, slabs, sidewalks, driveways, retaining walls, and decorative pours. Graded for drainage, finished clean.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">&#9707;</div>
-                <h3>Demolition &amp; Dirt Work</h3>
-                <p>Controlled teardowns, interior gut jobs, site clearing, grading, trenching, and backfill with equipment on hand.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">&#9883;</div>
-                <h3>Plumbing</h3>
-                <p>Fixture installs, pipe repair, water heaters, drain work, and rough-in for new construction and remodels.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ABOUT / CREDENTIALS -->
+<!-- GALLERY PREVIEW -->
 <section class="section">
     <div class="container">
-        <div class="section-header">
-            <div class="section-label">About</div>
-            <h2 class="section-title">Why E Team</h2>
-        </div>
-        <div class="about-grid">
-            <div class="about-copy">
-                <p>E Team Electrical is a multi-trade contracting crew serving all of Colorado. We handle electrical, construction, concrete, demolition, plumbing, and handyman work, coordinated as one team so jobs move faster with fewer miscommunications.</p>
-                <p>Every electrical job is led by a journeyman electrician. Every build is managed start to finish with clear estimates, photo documentation, and a clean site when we leave. We treat your property like our own.</p>
-                <p>Whether it's a panel swap, a full home remodel, a concrete pour, or just a list of small fixes you've been putting off, one call gets it done.</p>
-            </div>
-            <div class="credential-list">
-                <div class="credential">
-                    <div class="credential-icon">&#9889;</div>
-                    <div class="credential-text">Journeyman Electrician</div>
-                </div>
-                <div class="credential">
-                    <div class="credential-icon">&#9874;</div>
-                    <div class="credential-text">Licensed General Contractor</div>
-                </div>
-                <div class="credential">
-                    <div class="credential-icon">&#128737;</div>
-                    <div class="credential-text">Fully Insured</div>
-                </div>
-                <div class="credential">
-                    <div class="credential-icon">&#127968;</div>
-                    <div class="credential-text">Residential &amp; Light Commercial</div>
-                </div>
-                <div class="credential">
-                    <div class="credential-icon">&#128247;</div>
-                    <div class="credential-text">Photo-Documented Work</div>
-                </div>
-                <div class="credential">
-                    <div class="credential-icon">&#127967;</div>
-                    <div class="credential-text">Serving All of Colorado</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        <div class="section-label reveal">Portfolio</div>
+        <h2 class="section-title reveal reveal-delay-1">Recent Work</h2>
+        <p class="section-desc reveal reveal-delay-2">A sample of recent projects. <a href="gallery.php" style="color:var(--orange);text-decoration:underline;font-weight:700">View the full gallery &rarr;</a></p>
 
-<!-- GALLERY PREVIEW -->
-<section class="section section-dark">
-    <div class="container">
-        <div class="section-header">
-            <div class="section-label">Portfolio</div>
-            <h2 class="section-title">Recent Work</h2>
-            <p class="section-subtitle">A sample of recent projects. <a href="gallery.php" class="accent" style="text-decoration:underline">View the full gallery &rarr;</a></p>
-        </div>
-        <div class="tiles">
+        <div class="tiles reveal reveal-delay-3">
             <?php
-            $photo_dirs = ['FHRBAP', 'UTA', 'IPLCCI', 'IPPM', 'HTICLD', 'SIMHWHF', 'AE', 'CIMSP', 'CLFSRP', 'OGDROR', 'TSRNL', 'FYSIL', 'OFSI'];
+            $photo_dirs = ['FHRBAP','UTA','IPLCCI','IPPM','HTICLD','SIMHWHF','AE','CIMSP','CLFSRP','OGDROR','TSRNL','FYSIL','OFSI'];
             $preview_count = 0;
             $max_preview = 6;
             foreach ($photo_dirs as $dir) {
                 $path = __DIR__ . '/photos/' . $dir;
                 if (!is_dir($path)) continue;
-                $files = array_diff(scandir($path), ['.', '..', '.notafile', '.NotaFile', '(1).NotaFile']);
+                $files = array_diff(scandir($path), ['.','..', '.notafile', '.NotaFile', '(1).NotaFile']);
                 foreach ($files as $file) {
                     if ($preview_count >= $max_preview) break 2;
                     $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                     if (!in_array($ext, ['jpg','jpeg','png','gif','webp'])) continue;
-                    $src = "photos/{$dir}/{$file}";
                     ?>
-                    <a class="tile" href="gallery.php" style="background:var(--card)">
-                        <img class="tile-media-img" src="<?php echo htmlspecialchars($src); ?>" alt="Project photo" loading="lazy">
+                    <a class="tile" href="gallery.php">
+                        <img class="tile-media-img" src="photos/<?php echo htmlspecialchars("$dir/$file"); ?>" alt="Project photo" loading="lazy">
                     </a>
                     <?php
                     $preview_count++;
                 }
-            }
-            if ($preview_count === 0) {
-                echo '<p class="muted">Photos coming soon.</p>';
             }
             ?>
         </div>
     </div>
 </section>
 
+<!-- CTA BAND -->
+<section class="cta-band">
+    <div class="container cta-inner">
+        <div class="cta-text">Ready to start your project?</div>
+        <a class="btn btn-inv" href="#contact">Get a Free Estimate</a>
+    </div>
+</section>
+
 <!-- CONTACT -->
 <section class="section" id="contact">
     <div class="container">
-        <div class="section-header">
-            <div class="section-label">Get In Touch</div>
-            <h2 class="section-title">Request a Quote</h2>
-            <p class="section-subtitle">Tell us about your project. We will get back to you to schedule a walk-through and provide a clear estimate.</p>
-        </div>
+        <div class="section-label reveal">Get In Touch</div>
+        <h2 class="section-title reveal reveal-delay-1">Request a Quote</h2>
 
-        <div class="contact-grid">
-            <div>
+        <div class="contact-split reveal reveal-delay-2">
+            <div class="contact-info-panel">
+                <div class="contact-detail">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value"><a href="mailto:Djstatzz@gmail.com">Djstatzz@gmail.com</a></div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-label">Service Area</div>
+                    <div class="contact-value">Statewide Colorado</div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-label">Response Time</div>
+                    <div class="contact-value">Usually within 24 hours</div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-label">Estimates</div>
+                    <div class="contact-value">Free, no obligation</div>
+                </div>
+            </div>
+            <div class="contact-form-panel">
                 <?php if ($form_submitted): ?>
-                    <div class="eteam-notice success">Thanks, <?php echo htmlspecialchars($name); ?>! We got your message and will be in touch soon.</div>
+                    <div class="notice notice-ok">Thanks, <?php echo htmlspecialchars($name); ?>! We got your message and will be in touch soon.</div>
                 <?php else: ?>
                     <?php if ($form_error): ?>
-                        <div class="eteam-notice error"><?php echo htmlspecialchars($form_error); ?></div>
+                        <div class="notice notice-err"><?php echo htmlspecialchars($form_error); ?></div>
                     <?php endif; ?>
 
-                    <form class="eteam-form" method="post" action="index.php#contact">
+                    <form method="post" action="index.php#contact">
                         <input type="hidden" name="eteam_contact" value="1">
                         <div class="hp"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
-                        <div class="grid-2">
+                        <div class="form-grid">
                             <div>
-                                <label>Name <span class="req">*</span></label>
-                                <input type="text" name="name" placeholder="Your name" required>
+                                <label class="form-label">Name <span class="form-req">*</span></label>
+                                <input class="form-input" type="text" name="name" placeholder="Your name" required>
                             </div>
                             <div>
-                                <label>Email <span class="req">*</span></label>
-                                <input type="email" name="email" placeholder="your@email.com" required>
+                                <label class="form-label">Email <span class="form-req">*</span></label>
+                                <input class="form-input" type="email" name="email" placeholder="you@email.com" required>
                             </div>
                         </div>
-                        <div class="grid-2">
+                        <div class="form-grid">
                             <div>
-                                <label>Phone</label>
-                                <input type="tel" name="phone" placeholder="(555) 555-5555">
+                                <label class="form-label">Phone</label>
+                                <input class="form-input" type="tel" name="phone" placeholder="(555) 555-5555">
                             </div>
                             <div>
-                                <label>Service Needed</label>
-                                <select name="service">
+                                <label class="form-label">Service Needed</label>
+                                <select class="form-select" name="service">
                                     <option value="">Select a service</option>
                                     <option>Electrical</option>
                                     <option>General Construction</option>
@@ -255,52 +248,13 @@ include 'includes/header.php';
                                 </select>
                             </div>
                         </div>
-                        <label>Tell Us About the Job <span class="req">*</span></label>
-                        <textarea name="message" placeholder="Describe the project, location, and any details that would help us give you an accurate estimate..." required></textarea>
-                        <div style="margin-top:18px">
-                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        <label class="form-label">Tell Us About the Job <span class="form-req">*</span></label>
+                        <textarea class="form-textarea" name="message" placeholder="Describe the project, location, and any details..." required></textarea>
+                        <div style="margin-top:20px">
+                            <button type="submit" class="btn btn-fill">Send Message</button>
                         </div>
                     </form>
                 <?php endif; ?>
-            </div>
-
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-item-icon">&#128205;</div>
-                    <div>
-                        <div class="contact-item-label">Service Area</div>
-                        <div class="contact-item-value">Statewide Colorado</div>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-item-icon">&#128231;</div>
-                    <div>
-                        <div class="contact-item-label">Email</div>
-                        <div class="contact-item-value"><a href="mailto:Djstatzz@gmail.com">Djstatzz@gmail.com</a></div>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-item-icon">&#128336;</div>
-                    <div>
-                        <div class="contact-item-label">Response Time</div>
-                        <div class="contact-item-value">Usually within 24 hours</div>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-item-icon">&#128196;</div>
-                    <div>
-                        <div class="contact-item-label">Estimates</div>
-                        <div class="contact-item-value">Free, no obligation</div>
-                    </div>
-                </div>
-
-                <div class="cta-strip" style="margin-top:8px">
-                    <div>
-                        <h3>See our work first?</h3>
-                        <p>Browse hundreds of project photos.</p>
-                    </div>
-                    <a class="btn btn-outline btn-sm" href="gallery.php">View Gallery</a>
-                </div>
             </div>
         </div>
     </div>
