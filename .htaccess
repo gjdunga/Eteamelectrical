@@ -16,6 +16,11 @@ Options -Indexes
     Deny from all
 </Files>
 
+<Files "admin-config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
 # Cache static assets
 <IfModule mod_expires.c>
     ExpiresActive On
