@@ -10,6 +10,12 @@ Options -Indexes
     Deny from all
 </FilesMatch>
 
+# Protect mail config
+<Files "mail-config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
 # Cache static assets
 <IfModule mod_expires.c>
     ExpiresActive On

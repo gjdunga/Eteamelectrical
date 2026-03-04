@@ -1,8 +1,6 @@
 <?php
 $page_title = 'Gallery';
-$body_class = 'page-gallery';
 
-// Directory labels
 $dir_labels = [
     'AE'      => 'AE',
     'CIMSP'   => 'CIMSP',
@@ -19,12 +17,10 @@ $dir_labels = [
     'UTA'     => 'UTA',
 ];
 
-// Supported file extensions
 $image_exts = ['jpg','jpeg','png','gif','webp'];
 $video_exts = ['mp4','mov','webm','avi','mkv'];
 $all_exts   = array_merge($image_exts, $video_exts);
 
-// Scan photo directories
 $galleries = [];
 $photos_root = __DIR__ . '/photos';
 if (is_dir($photos_root)) {
@@ -32,16 +28,15 @@ if (is_dir($photos_root)) {
     foreach ($dirs as $dir) {
         $full = $photos_root . '/' . $dir;
         if (!is_dir($full)) continue;
-        $files = array_diff(scandir($full), ['.', '..', '.notafile', '.NotaFile']);
+        $files = array_diff(scandir($full), ['.', '..', '.notafile', '.NotaFile', '(1).NotaFile']);
         $media = [];
         foreach ($files as $f) {
             $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
             if (!in_array($ext, $all_exts)) continue;
             $media[] = [
-                'file'  => $f,
-                'path'  => "photos/{$dir}/{$f}",
-                'type'  => in_array($ext, $video_exts) ? 'video' : 'image',
-                'ext'   => $ext,
+                'file' => $f,
+                'path' => "photos/{$dir}/{$f}",
+                'type' => in_array($ext, $video_exts) ? 'video' : 'image',
             ];
         }
         if (!empty($media)) {
@@ -53,22 +48,19 @@ if (is_dir($photos_root)) {
     }
 }
 
+// Collect slideshow images
+$slideshow_images = [];
+foreach ($galleries as $g) {
+    foreach ($g['media'] as $m) {
+        if ($m['type'] === 'image') $slideshow_images[] = $m['path'];
+    }
+}
+
 include 'includes/header.php';
 ?>
 
-<?php
-// Collect all image paths for the header slideshow
-$slideshow_images = [];
-foreach ($galleries as $key => $g) {
-    foreach ($g['media'] as $m) {
-        if ($m['type'] === 'image') {
-            $slideshow_images[] = $m['path'];
-        }
-    }
-}
-?>
-
-<section class="storm-header slideshow-header">
+<!-- Slideshow Header -->
+<section class="slideshow-header">
     <div class="slideshow-bg" aria-hidden="true">
         <?php foreach ($slideshow_images as $i => $src): ?>
         <img class="slideshow-img<?php echo $i === 0 ? ' active' : ''; ?>"
@@ -78,8 +70,9 @@ foreach ($galleries as $key => $g) {
         <div class="slideshow-overlay"></div>
     </div>
     <div class="container storm-inner">
-        <h1 class="storm-title">Our Work</h1>
-        <p class="storm-subtitle">Photos and videos from recent projects. Click any image to view full size.</p>
+        <div class="section-label">Portfolio</div>
+        <h1 class="section-title" style="font-size:clamp(2rem,4vw,3rem)">Our Work</h1>
+        <p class="section-subtitle">Photos and videos from recent projects across Colorado. Click any image to view full size.</p>
         <?php if (count($slideshow_images) > 1): ?>
         <div class="slideshow-controls">
             <button class="slideshow-btn" id="slideshow-prev" aria-label="Previous">&#8249;</button>
@@ -91,48 +84,58 @@ foreach ($galleries as $key => $g) {
     </div>
 </section>
 
-<div class="container section-stack">
+<section class="section">
+    <div class="container">
 
-    <?php if (empty($galleries)): ?>
-        <p class="muted">No project photos found yet. Check back soon.</p>
-    <?php else: ?>
+        <?php if (empty($galleries)): ?>
+            <p class="muted">No project photos found yet. Check back soon.</p>
+        <?php else: ?>
 
-        <nav class="trade-filters">
-            <a class="chip" href="#" data-filter="all" style="border-color:var(--accent);color:var(--accent)">All Projects</a>
-            <?php foreach ($galleries as $key => $g): ?>
-                <a class="chip" href="#section-<?php echo htmlspecialchars($key); ?>" data-filter="<?php echo htmlspecialchars($key); ?>"><?php echo htmlspecialchars($g['label']); ?> (<?php echo count($g['media']); ?>)</a>
-            <?php endforeach; ?>
-        </nav>
-
-        <?php
-        $global_index = 0;
-        foreach ($galleries as $key => $g):
-        ?>
-        <section id="section-<?php echo htmlspecialchars($key); ?>" class="gallery-section" data-gallery="<?php echo htmlspecialchars($key); ?>" style="margin-bottom:28px">
-            <h2><?php echo htmlspecialchars($g['label']); ?></h2>
-            <div class="tiles">
-                <?php foreach ($g['media'] as $m): ?>
-                    <?php if ($m['type'] === 'video'): ?>
-                        <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="video" data-src="<?php echo htmlspecialchars($m['path']); ?>" style="cursor:pointer">
-                            <video class="tile-media-video" muted preload="metadata" playsinline>
-                                <source src="<?php echo htmlspecialchars($m['path']); ?>#t=0.5">
-                            </video>
-                            <div class="tile-play"><span>&#9654;</span></div>
-                        </div>
-                    <?php else: ?>
-                        <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="image" data-src="<?php echo htmlspecialchars($m['path']); ?>" style="cursor:pointer">
-                            <img class="tile-media-img" src="<?php echo htmlspecialchars($m['path']); ?>" alt="Project photo" loading="lazy">
-                        </div>
-                    <?php endif; ?>
-                    <?php $global_index++; ?>
+            <nav class="filter-bar">
+                <a class="chip active" href="#" data-filter="all">All (<?php echo array_sum(array_map(function($g){return count($g['media']);}, $galleries)); ?>)</a>
+                <?php foreach ($galleries as $key => $g): ?>
+                    <a class="chip" href="#section-<?php echo htmlspecialchars($key); ?>" data-filter="<?php echo htmlspecialchars($key); ?>"><?php echo htmlspecialchars($g['label']); ?> (<?php echo count($g['media']); ?>)</a>
                 <?php endforeach; ?>
+            </nav>
+
+            <?php
+            $global_index = 0;
+            foreach ($galleries as $key => $g):
+            ?>
+            <section id="section-<?php echo htmlspecialchars($key); ?>" class="gallery-section" data-gallery="<?php echo htmlspecialchars($key); ?>" style="margin-bottom:32px">
+                <h2 class="section-title" style="font-size:1.4rem;margin-bottom:16px"><?php echo htmlspecialchars($g['label']); ?></h2>
+                <div class="tiles">
+                    <?php foreach ($g['media'] as $m): ?>
+                        <?php if ($m['type'] === 'video'): ?>
+                            <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="video" data-src="<?php echo htmlspecialchars($m['path']); ?>">
+                                <video class="tile-media-video" muted preload="metadata" playsinline>
+                                    <source src="<?php echo htmlspecialchars($m['path']); ?>#t=0.5">
+                                </video>
+                                <div class="tile-play"><span>&#9654;</span></div>
+                            </div>
+                        <?php else: ?>
+                            <div class="tile" data-lightbox="<?php echo $global_index; ?>" data-type="image" data-src="<?php echo htmlspecialchars($m['path']); ?>">
+                                <img class="tile-media-img" src="<?php echo htmlspecialchars($m['path']); ?>" alt="Project photo" loading="lazy">
+                            </div>
+                        <?php endif; ?>
+                        <?php $global_index++; ?>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+        <div class="cta-strip">
+            <div>
+                <h3>Like what you see?</h3>
+                <p>Get a free estimate for your project.</p>
             </div>
-        </section>
-        <?php endforeach; ?>
+            <a class="btn btn-primary btn-sm" href="index.php#contact">Get a Quote</a>
+        </div>
 
-    <?php endif; ?>
-
-</div>
+    </div>
+</section>
 
 <!-- Lightbox -->
 <div class="lightbox-overlay" id="lightbox">
@@ -144,6 +147,7 @@ foreach ($galleries as $key => $g) {
 
 <script>
 (function() {
+    // Lightbox
     var items = document.querySelectorAll('[data-lightbox]');
     var overlay = document.getElementById('lightbox');
     var content = document.getElementById('lightbox-content');
@@ -167,19 +171,13 @@ foreach ($galleries as $key => $g) {
         var src  = el.getAttribute('data-src');
         if (type === 'video') {
             var v = document.createElement('video');
-            v.src = src;
-            v.controls = true;
-            v.autoplay = true;
-            v.playsInline = true;
-            v.style.maxWidth = '92vw';
-            v.style.maxHeight = '90vh';
-            v.style.borderRadius = '16px';
-            v.style.background = '#000';
+            v.src = src; v.controls = true; v.autoplay = true; v.playsInline = true;
+            v.style.maxWidth = '92vw'; v.style.maxHeight = '90vh';
+            v.style.borderRadius = '12px'; v.style.background = '#000';
             content.appendChild(v);
         } else {
             var img = document.createElement('img');
-            img.src = src;
-            img.alt = 'Project photo';
+            img.src = src; img.alt = 'Project photo';
             content.appendChild(img);
         }
         overlay.classList.add('active');
@@ -198,13 +196,10 @@ foreach ($galleries as $key => $g) {
         });
     });
 
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) hide();
-    });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) hide(); });
     document.querySelector('.lightbox-close').addEventListener('click', hide);
     document.querySelector('.lightbox-nav.prev').addEventListener('click', function(e) { e.stopPropagation(); show(current - 1); });
     document.querySelector('.lightbox-nav.next').addEventListener('click', function(e) { e.stopPropagation(); show(current + 1); });
-
     document.addEventListener('keydown', function(e) {
         if (!overlay.classList.contains('active')) return;
         if (e.key === 'Escape') hide();
@@ -219,9 +214,8 @@ foreach ($galleries as $key => $g) {
         chip.addEventListener('click', function(e) {
             e.preventDefault();
             var f = chip.getAttribute('data-filter');
-            chips.forEach(function(c) { c.style.borderColor = ''; c.style.color = ''; });
-            chip.style.borderColor = 'var(--accent)';
-            chip.style.color = 'var(--accent)';
+            chips.forEach(function(c) { c.classList.remove('active'); });
+            chip.classList.add('active');
             sections.forEach(function(s) {
                 s.style.display = (f === 'all' || s.getAttribute('data-gallery') === f) ? '' : 'none';
             });
@@ -252,14 +246,8 @@ foreach ($galleries as $key => $g) {
 
     function next() { showSlide(current + 1); }
     function prev() { showSlide(current - 1); }
-
-    function startTimer() {
-        stopTimer();
-        interval = setInterval(next, DELAY);
-    }
-    function stopTimer() {
-        if (interval) { clearInterval(interval); interval = null; }
-    }
+    function startTimer() { stopTimer(); interval = setInterval(next, DELAY); }
+    function stopTimer() { if (interval) { clearInterval(interval); interval = null; } }
 
     var btnPrev = document.getElementById('slideshow-prev');
     var btnNext = document.getElementById('slideshow-next');

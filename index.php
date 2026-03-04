@@ -1,177 +1,309 @@
 <?php
-$body_class = 'home';
+require_once __DIR__ . '/includes/mail.php';
 
-// Trade definitions
-$trades = [
-    ['slug' => 'concrete',           'name' => 'Concrete',           'img' => 'concrete.png',
-     'desc' => 'Foundations, slabs, sidewalks, and decorative concrete. Poured right, finished clean, built to code.'],
-    ['slug' => 'construction',       'name' => 'Construction',       'img' => 'construction.png',
-     'desc' => 'New builds, additions, framing, and structural work. Full scope residential and light commercial.'],
-    ['slug' => 'demolition',         'name' => 'Demolition',         'img' => 'demolition.png',
-     'desc' => 'Controlled teardowns, interior gut jobs, and site clearing. Safe, permitted, debris hauled.'],
-    ['slug' => 'dirt-work',          'name' => 'Dirt Work',          'img' => 'dirt-work.png',
-     'desc' => 'Grading, trenching, backfill, and site prep. Equipment on hand for jobs of all sizes.'],
-    ['slug' => 'driveways',          'name' => 'Driveways',          'img' => 'driveways.png',
-     'desc' => 'Concrete, gravel, and asphalt driveways. Graded for drainage, built for traffic.'],
-    ['slug' => 'electrical',         'name' => 'Electrical',         'img' => 'electrical.png',
-     'desc' => 'Panel upgrades, new circuits, lighting, troubleshooting, and full rewires. Licensed and insured.'],
-    ['slug' => 'handyman',           'name' => 'Handyman',           'img' => 'handyman.png',
-     'desc' => 'Small fixes, odd jobs, mounting, patching, and general repairs. No job too small.'],
-    ['slug' => 'plumbing',           'name' => 'Plumbing',           'img' => 'plumbing.png',
-     'desc' => 'Fixture installs, pipe repair, water heaters, and drain work. Residential and light commercial.'],
-    ['slug' => 'project-management', 'name' => 'Project Management', 'img' => 'project-management.png',
-     'desc' => 'Multi-trade coordination, scheduling, permitting, and owner communication. One point of contact.'],
-    ['slug' => 'retaining-walls',    'name' => 'Retaining Walls',    'img' => 'retaining-wall.png',
-     'desc' => 'Block, timber, and poured walls. Engineered for drainage and load, finished for curb appeal.'],
-];
+// Handle contact form
+$form_submitted = false;
+$form_error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_contact'])) {
+    $name    = trim($_POST['name'] ?? '');
+    $email   = trim($_POST['email'] ?? '');
+    $phone   = trim($_POST['phone'] ?? '');
+    $service = trim($_POST['service'] ?? '');
+    $message = trim($_POST['message'] ?? '');
+    $hp      = trim($_POST['website'] ?? '');
+
+    if (!empty($hp)) {
+        $form_error = 'Something went wrong. Please try again.';
+    } elseif (empty($name) || empty($email) || empty($message)) {
+        $form_error = 'Please fill in all required fields.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $form_error = 'Please enter a valid email address.';
+    } else {
+        $body = "<h2>New Quote Request from eteamelectrical.com</h2>";
+        $body .= "<p><strong>Name:</strong> " . htmlspecialchars($name) . "</p>";
+        $body .= "<p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>";
+        $body .= "<p><strong>Phone:</strong> " . htmlspecialchars($phone ?: 'Not provided') . "</p>";
+        $body .= "<p><strong>Service:</strong> " . htmlspecialchars($service ?: 'Not specified') . "</p>";
+        $body .= "<p><strong>Message:</strong><br>" . nl2br(htmlspecialchars($message)) . "</p>";
+        $body .= "<hr><p style='color:#888;font-size:12px'>Sent from E Team Electrical website contact form</p>";
+
+        $result = eteam_send_mail(
+            "Quote Request: " . $name,
+            $body,
+            $email,
+            $name
+        );
+
+        if ($result['success']) {
+            $form_submitted = true;
+        } else {
+            $form_error = 'Could not send your message right now. Please call or email us directly.';
+        }
+    }
+}
 
 include 'includes/header.php';
 ?>
 
+<!-- HERO -->
 <section class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="container hero-inner">
         <div class="hero-copy">
-            <div class="badge">Multi-Trade Remodel &amp; Construction Crew</div>
-            <h1 class="hero-title">The crew you call when the job needs to be done right.</h1>
-            <p class="hero-lede">Electrical, plumbing, concrete, dirt work, demolition, handyman work, and full project management, coordinated as one team.</p>
+            <div class="hero-badge">Serving All of Colorado</div>
+            <h1 class="hero-title">Built Right.<br><span class="highlight">Every Time.</span></h1>
+            <p class="hero-lede">Journeyman electrician, general contractor, and skilled handyman. From panel upgrades to full remodels, one call gets the whole job done.</p>
             <div class="hero-actions">
-                <a class="btn btn-primary" href="#quote">Request a Quote</a>
-                <a class="btn btn-ghost" href="gallery.php">See the Work</a>
+                <a class="btn btn-primary" href="#contact">Get a Quote</a>
+                <a class="btn btn-outline" href="gallery.php">See Our Work</a>
             </div>
         </div>
-        <div class="hero-panel">
-            <div class="panel-title">Fast intake</div>
-            <div class="panel-body">
-                <ul class="checklist">
-                    <li>Licensed &amp; insured</li>
-                    <li>Clear estimates</li>
-                    <li>Photo updates</li>
-                    <li>Clean finish</li>
-                </ul>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-num">8+</div>
+                <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">450+</div>
+                <div class="stat-label">Jobs Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">CO</div>
+                <div class="stat-label">Statewide</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Licensed &amp; Insured</div>
             </div>
         </div>
     </div>
 </section>
 
-<div class="container section-stack">
-    <article class="page-content">
+<!-- SERVICES -->
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">What We Do</div>
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Multi-trade capabilities under one crew. No juggling subcontractors, no finger-pointing between trades.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">&#9889;</div>
+                <h3>Electrical</h3>
+                <p>Panel upgrades, new circuits, rewires, lighting, troubleshooting, and code corrections. Journeyman electrician on every job.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#9960;</div>
+                <h3>General Construction</h3>
+                <p>New builds, additions, framing, structural repairs, and full project management from permits to punch list.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#9874;</div>
+                <h3>Handyman</h3>
+                <p>Small jobs, odd fixes, mounting, patching, door and window installs, drywall, and everything in between. No job too small.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#9638;</div>
+                <h3>Concrete</h3>
+                <p>Foundations, slabs, sidewalks, driveways, retaining walls, and decorative pours. Graded for drainage, finished clean.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#9707;</div>
+                <h3>Demolition &amp; Dirt Work</h3>
+                <p>Controlled teardowns, interior gut jobs, site clearing, grading, trenching, and backfill with equipment on hand.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">&#9883;</div>
+                <h3>Plumbing</h3>
+                <p>Fixture installs, pipe repair, water heaters, drain work, and rough-in for new construction and remodels.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <section class="eteam-trade-grid">
-            <h2>Our Trades</h2>
-            <div class="cards">
-                <?php foreach ($trades as $t): ?>
-                <div class="card">
-                    <div class="card-media" style="background-image:url(assets/img/trades/<?php echo $t['img']; ?>)"></div>
-                    <div class="card-body">
-                        <h3><?php echo htmlspecialchars($t['name']); ?></h3>
-                        <p><?php echo htmlspecialchars($t['desc']); ?></p>
+<!-- ABOUT / CREDENTIALS -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">About</div>
+            <h2 class="section-title">Why E Team</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-copy">
+                <p>E Team Electrical is a multi-trade contracting crew serving all of Colorado. We handle electrical, construction, concrete, demolition, plumbing, and handyman work, coordinated as one team so jobs move faster with fewer miscommunications.</p>
+                <p>Every electrical job is led by a journeyman electrician. Every build is managed start to finish with clear estimates, photo documentation, and a clean site when we leave. We treat your property like our own.</p>
+                <p>Whether it's a panel swap, a full home remodel, a concrete pour, or just a list of small fixes you've been putting off, one call gets it done.</p>
+            </div>
+            <div class="credential-list">
+                <div class="credential">
+                    <div class="credential-icon">&#9889;</div>
+                    <div class="credential-text">Journeyman Electrician</div>
+                </div>
+                <div class="credential">
+                    <div class="credential-icon">&#9874;</div>
+                    <div class="credential-text">Licensed General Contractor</div>
+                </div>
+                <div class="credential">
+                    <div class="credential-icon">&#128737;</div>
+                    <div class="credential-text">Fully Insured</div>
+                </div>
+                <div class="credential">
+                    <div class="credential-icon">&#127968;</div>
+                    <div class="credential-text">Residential &amp; Light Commercial</div>
+                </div>
+                <div class="credential">
+                    <div class="credential-icon">&#128247;</div>
+                    <div class="credential-text">Photo-Documented Work</div>
+                </div>
+                <div class="credential">
+                    <div class="credential-icon">&#127967;</div>
+                    <div class="credential-text">Serving All of Colorado</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY PREVIEW -->
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Portfolio</div>
+            <h2 class="section-title">Recent Work</h2>
+            <p class="section-subtitle">A sample of recent projects. <a href="gallery.php" class="accent" style="text-decoration:underline">View the full gallery &rarr;</a></p>
+        </div>
+        <div class="tiles">
+            <?php
+            $photo_dirs = ['FHRBAP', 'UTA', 'IPLCCI', 'IPPM', 'HTICLD', 'SIMHWHF', 'AE', 'CIMSP', 'CLFSRP', 'OGDROR', 'TSRNL', 'FYSIL', 'OFSI'];
+            $preview_count = 0;
+            $max_preview = 6;
+            foreach ($photo_dirs as $dir) {
+                $path = __DIR__ . '/photos/' . $dir;
+                if (!is_dir($path)) continue;
+                $files = array_diff(scandir($path), ['.', '..', '.notafile', '.NotaFile', '(1).NotaFile']);
+                foreach ($files as $file) {
+                    if ($preview_count >= $max_preview) break 2;
+                    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    if (!in_array($ext, ['jpg','jpeg','png','gif','webp'])) continue;
+                    $src = "photos/{$dir}/{$file}";
+                    ?>
+                    <a class="tile" href="gallery.php" style="background:var(--card)">
+                        <img class="tile-media-img" src="<?php echo htmlspecialchars($src); ?>" alt="Project photo" loading="lazy">
+                    </a>
+                    <?php
+                    $preview_count++;
+                }
+            }
+            if ($preview_count === 0) {
+                echo '<p class="muted">Photos coming soon.</p>';
+            }
+            ?>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Get In Touch</div>
+            <h2 class="section-title">Request a Quote</h2>
+            <p class="section-subtitle">Tell us about your project. We will get back to you to schedule a walk-through and provide a clear estimate.</p>
+        </div>
+
+        <div class="contact-grid">
+            <div>
+                <?php if ($form_submitted): ?>
+                    <div class="eteam-notice success">Thanks, <?php echo htmlspecialchars($name); ?>! We got your message and will be in touch soon.</div>
+                <?php else: ?>
+                    <?php if ($form_error): ?>
+                        <div class="eteam-notice error"><?php echo htmlspecialchars($form_error); ?></div>
+                    <?php endif; ?>
+
+                    <form class="eteam-form" method="post" action="index.php#contact">
+                        <input type="hidden" name="eteam_contact" value="1">
+                        <div class="hp"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+                        <div class="grid-2">
+                            <div>
+                                <label>Name <span class="req">*</span></label>
+                                <input type="text" name="name" placeholder="Your name" required>
+                            </div>
+                            <div>
+                                <label>Email <span class="req">*</span></label>
+                                <input type="email" name="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div>
+                                <label>Phone</label>
+                                <input type="tel" name="phone" placeholder="(555) 555-5555">
+                            </div>
+                            <div>
+                                <label>Service Needed</label>
+                                <select name="service">
+                                    <option value="">Select a service</option>
+                                    <option>Electrical</option>
+                                    <option>General Construction</option>
+                                    <option>Handyman</option>
+                                    <option>Concrete</option>
+                                    <option>Demolition / Dirt Work</option>
+                                    <option>Plumbing</option>
+                                    <option>Full Remodel</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label>Tell Us About the Job <span class="req">*</span></label>
+                        <textarea name="message" placeholder="Describe the project, location, and any details that would help us give you an accurate estimate..." required></textarea>
+                        <div style="margin-top:18px">
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </div>
+                    </form>
+                <?php endif; ?>
+            </div>
+
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-item-icon">&#128205;</div>
+                    <div>
+                        <div class="contact-item-label">Service Area</div>
+                        <div class="contact-item-value">Statewide Colorado</div>
                     </div>
                 </div>
-                <?php endforeach; ?>
-            </div>
-        </section>
-
-        <h2 style="margin-top:28px;">Recent Projects</h2>
-        <section class="eteam-gallery-grid">
-            <div class="tiles">
-                <?php
-                // Show a preview of gallery photos (first 6)
-                $photo_dirs = ['AE', 'CIMSP', 'CLFSRP', 'FHRBAP', 'FYSIL', 'HTICLD', 'IPLCCI', 'IPPM', 'OFSI', 'OGDROR', 'SIMHWHF', 'TSRNL', 'UTA'];
-                $preview_count = 0;
-                $max_preview = 6;
-                foreach ($photo_dirs as $dir) {
-                    $path = __DIR__ . '/photos/' . $dir;
-                    if (!is_dir($path)) continue;
-                    $files = array_diff(scandir($path), ['.', '..', '.notafile', '.NotaFile']);
-                    foreach ($files as $file) {
-                        if ($preview_count >= $max_preview) break 2;
-                        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                        if (!in_array($ext, ['jpg','jpeg','png','gif','webp','mp4','mov','webm'])) continue;
-                        $src = "photos/{$dir}/{$file}";
-                        if (in_array($ext, ['mp4','mov','webm'])) {
-                            ?>
-                            <a class="tile" href="gallery.php">
-                                <video class="tile-media-video" muted preload="metadata" playsinline>
-                                    <source src="<?php echo htmlspecialchars($src); ?>#t=0.5">
-                                </video>
-                                <div class="tile-play"><span>&#9654;</span></div>
-                            </a>
-                            <?php
-                        } else {
-                            ?>
-                            <a class="tile" href="gallery.php" style="background:var(--card)">
-                                <img class="tile-media-img" src="<?php echo htmlspecialchars($src); ?>" alt="Project photo" loading="lazy">
-                            </a>
-                            <?php
-                        }
-                        $preview_count++;
-                    }
-                }
-                if ($preview_count === 0) {
-                    echo '<p class="muted">Photos coming soon.</p>';
-                } elseif ($preview_count >= $max_preview) {
-                    echo '<a class="tile" href="gallery.php" style="display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:var(--accent)">View All &rarr;</a>';
-                }
-                ?>
-            </div>
-        </section>
-
-    </article>
-
-    <section id="quote" class="quote-block">
-        <h2>Request a Quote</h2>
-        <p class="muted">Drop your details and what you need. We will follow up to schedule a walk-through.</p>
-
-        <?php
-        $form_submitted = false;
-        $form_error = '';
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_quote'])) {
-            $name  = trim($_POST['name'] ?? '');
-            $contact = trim($_POST['contact'] ?? '');
-            $job   = trim($_POST['job'] ?? '');
-            $hp    = trim($_POST['website'] ?? '');
-
-            // Honeypot check
-            if (!empty($hp)) {
-                $form_error = 'Something went wrong. Please try again.';
-            } elseif (empty($name) || empty($contact) || empty($job)) {
-                $form_error = 'Please fill in all required fields.';
-            } else {
-                // Write to a simple log file (replace with email or DB as needed)
-                $entry = date('Y-m-d H:i:s') . " | " . $name . " | " . $contact . " | " . str_replace("\n", " ", $job) . "\n";
-                @file_put_contents(__DIR__ . '/quote-requests.log', $entry, FILE_APPEND | LOCK_EX);
-                $form_submitted = true;
-            }
-        }
-        ?>
-
-        <?php if ($form_submitted): ?>
-            <div class="eteam-notice success">Thanks, <?php echo htmlspecialchars($name); ?>! We will be in touch soon.</div>
-        <?php elseif ($form_error): ?>
-            <div class="eteam-notice error"><?php echo htmlspecialchars($form_error); ?></div>
-        <?php endif; ?>
-
-        <form class="eteam-form" method="post" action="index.php#quote">
-            <input type="hidden" name="eteam_quote" value="1">
-            <div class="hp"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-            <div class="grid-2">
-                <div>
-                    <label>Name <span class="req">*</span></label>
-                    <input type="text" name="name" placeholder="Name" required>
+                <div class="contact-item">
+                    <div class="contact-item-icon">&#128231;</div>
+                    <div>
+                        <div class="contact-item-label">Email</div>
+                        <div class="contact-item-value"><a href="mailto:contact@eteamelectrical.com">contact@eteamelectrical.com</a></div>
+                    </div>
                 </div>
-                <div>
-                    <label>Phone / Email <span class="req">*</span></label>
-                    <input type="text" name="contact" placeholder="Phone or Email" required>
+                <div class="contact-item">
+                    <div class="contact-item-icon">&#128336;</div>
+                    <div>
+                        <div class="contact-item-label">Response Time</div>
+                        <div class="contact-item-value">Usually within 24 hours</div>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-item-icon">&#128196;</div>
+                    <div>
+                        <div class="contact-item-label">Estimates</div>
+                        <div class="contact-item-value">Free, no obligation</div>
+                    </div>
+                </div>
+
+                <div class="cta-strip" style="margin-top:8px">
+                    <div>
+                        <h3>See our work first?</h3>
+                        <p>Browse hundreds of project photos.</p>
+                    </div>
+                    <a class="btn btn-outline btn-sm" href="gallery.php">View Gallery</a>
                 </div>
             </div>
-            <label>What are we building/fixing? <span class="req">*</span></label>
-            <textarea rows="4" name="job" placeholder="Describe the job..." required></textarea>
-            <div style="margin-top:14px">
-                <button type="submit" class="btn btn-primary">Send Request</button>
-            </div>
-        </form>
-    </section>
-</div>
+        </div>
+    </div>
+</section>
 
 <?php include 'includes/footer.php'; ?>

@@ -1,18 +1,13 @@
 <?php
 $page_title = 'Reviews';
-$body_class = 'page-reviews';
 
-// Simple flat-file reviews storage
 $reviews_file = __DIR__ . '/reviews.json';
-
-// Load existing reviews
 $reviews = [];
 if (file_exists($reviews_file)) {
     $raw = file_get_contents($reviews_file);
     $reviews = json_decode($raw, true) ?: [];
 }
 
-// Handle new review submission
 $review_submitted = false;
 $review_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_review'])) {
@@ -39,10 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_review'])) {
     }
 }
 
-// Reverse so newest first
 $display_reviews = array_reverse($reviews);
-
-// Average rating
 $avg = 0;
 if (count($reviews) > 0) {
     $avg = array_sum(array_column($reviews, 'stars')) / count($reviews);
@@ -51,103 +43,110 @@ if (count($reviews) > 0) {
 include 'includes/header.php';
 ?>
 
-<section class="storm-header">
-    <div class="storm-bg" aria-hidden="true"></div>
-    <div class="container storm-inner">
-        <h1 class="storm-title">Customer Reviews</h1>
-        <p class="storm-subtitle">
+<section class="section">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="section-label">Testimonials</div>
+            <h1 class="section-title">Customer Reviews</h1>
             <?php if (count($reviews) > 0): ?>
-                <?php echo count($reviews); ?> review<?php echo count($reviews) !== 1 ? 's' : ''; ?> &middot; <?php echo number_format($avg, 1); ?> / 5 average
+                <p class="section-subtitle" style="margin-left:auto;margin-right:auto">
+                    <?php echo count($reviews); ?> review<?php echo count($reviews) !== 1 ? 's' : ''; ?>
+                    &middot;
+                    <span class="accent"><?php echo number_format($avg, 1); ?> / 5</span> average
+                    &middot;
+                    <?php echo str_repeat('&#9733;', round($avg)); ?><?php echo str_repeat('&#9734;', 5 - round($avg)); ?>
+                </p>
             <?php else: ?>
-                Be the first to leave a review.
+                <p class="section-subtitle" style="margin-left:auto;margin-right:auto">No reviews yet. Be the first to share your experience.</p>
             <?php endif; ?>
-        </p>
-    </div>
-</section>
+        </div>
 
-<div class="container section-stack">
+        <!-- Leave a review -->
+        <div style="max-width:680px;margin:0 auto 40px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px">
+            <h2 class="section-title" style="font-size:1.3rem;margin-bottom:16px">Leave a Review</h2>
 
-    <!-- Leave a review -->
-    <article class="page-content" style="margin-bottom:28px">
-        <h2>Leave a Review</h2>
+            <?php if ($review_submitted): ?>
+                <div class="eteam-notice success">Thanks for the review, <?php echo htmlspecialchars($rname); ?>!</div>
+            <?php else: ?>
+                <?php if ($review_error): ?>
+                    <div class="eteam-notice error"><?php echo htmlspecialchars($review_error); ?></div>
+                <?php endif; ?>
 
-        <?php if ($review_submitted): ?>
-            <div class="eteam-notice success">Thanks for the review, <?php echo htmlspecialchars($rname); ?>!</div>
-        <?php elseif ($review_error): ?>
-            <div class="eteam-notice error"><?php echo htmlspecialchars($review_error); ?></div>
+                <form class="eteam-form" method="post" action="reviews.php">
+                    <input type="hidden" name="eteam_review" value="1">
+                    <div class="hp"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+                    <div class="grid-2">
+                        <div>
+                            <label>Your Name <span class="req">*</span></label>
+                            <input type="text" name="reviewer_name" placeholder="Your name" required>
+                        </div>
+                        <div>
+                            <label>Service Received</label>
+                            <select name="trade">
+                                <option value="">Select a service</option>
+                                <option>Electrical</option>
+                                <option>General Construction</option>
+                                <option>Handyman</option>
+                                <option>Concrete</option>
+                                <option>Demolition / Dirt Work</option>
+                                <option>Plumbing</option>
+                                <option>Full Remodel</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label>Rating <span class="req">*</span></label>
+                    <div class="eteam-rating">
+                        <input type="radio" name="stars" id="s5" value="5"><label for="s5">&#9733;</label>
+                        <input type="radio" name="stars" id="s4" value="4"><label for="s4">&#9733;</label>
+                        <input type="radio" name="stars" id="s3" value="3"><label for="s3">&#9733;</label>
+                        <input type="radio" name="stars" id="s2" value="2"><label for="s2">&#9733;</label>
+                        <input type="radio" name="stars" id="s1" value="1"><label for="s1">&#9733;</label>
+                    </div>
+
+                    <label>Your Review <span class="req">*</span></label>
+                    <textarea rows="4" name="review_text" placeholder="Tell us about your experience..." required></textarea>
+
+                    <div style="margin-top:18px">
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </div>
+                </form>
+            <?php endif; ?>
+        </div>
+
+        <!-- Reviews list -->
+        <?php if (!empty($display_reviews)): ?>
+        <div class="review-cards">
+            <?php foreach ($display_reviews as $r): ?>
+            <div class="review-card">
+                <div class="review-header">
+                    <div>
+                        <div class="review-name"><?php echo htmlspecialchars($r['name']); ?></div>
+                        <?php if (!empty($r['trade'])): ?>
+                            <div class="review-trade"><?php echo htmlspecialchars($r['trade']); ?></div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="review-stars">
+                        <?php echo str_repeat('&#9733;', $r['stars']); ?><?php echo str_repeat('&#9734;', 5 - $r['stars']); ?>
+                    </div>
+                </div>
+                <p class="review-text"><?php echo nl2br(htmlspecialchars($r['text'])); ?></p>
+                <div class="review-footer"><?php echo htmlspecialchars($r['date']); ?></div>
+            </div>
+            <?php endforeach; ?>
+        </div>
         <?php endif; ?>
 
-        <form class="eteam-form" method="post" action="reviews.php">
-            <input type="hidden" name="eteam_review" value="1">
-            <div class="hp"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-
-            <div class="grid-2">
-                <div>
-                    <label>Your Name <span class="req">*</span></label>
-                    <input type="text" name="reviewer_name" placeholder="Name" required>
-                </div>
-                <div>
-                    <label>Trade / Service</label>
-                    <select name="trade">
-                        <option value="">Select a trade</option>
-                        <option>Electrical</option>
-                        <option>Plumbing</option>
-                        <option>Concrete</option>
-                        <option>Construction</option>
-                        <option>Demolition</option>
-                        <option>Dirt Work</option>
-                        <option>Driveways</option>
-                        <option>Handyman</option>
-                        <option>Project Management</option>
-                        <option>Retaining Walls</option>
-                        <option>Other</option>
-                    </select>
-                </div>
+        <div class="cta-strip">
+            <div>
+                <h3>Need work done?</h3>
+                <p>Get a free estimate for your project.</p>
             </div>
-
-            <label>Rating <span class="req">*</span></label>
-            <div class="eteam-rating">
-                <input type="radio" name="stars" id="s5" value="5"><label for="s5">&#9733;</label>
-                <input type="radio" name="stars" id="s4" value="4"><label for="s4">&#9733;</label>
-                <input type="radio" name="stars" id="s3" value="3"><label for="s3">&#9733;</label>
-                <input type="radio" name="stars" id="s2" value="2"><label for="s2">&#9733;</label>
-                <input type="radio" name="stars" id="s1" value="1"><label for="s1">&#9733;</label>
-            </div>
-
-            <label>Your Review <span class="req">*</span></label>
-            <textarea rows="4" name="review_text" placeholder="Tell us about your experience..." required></textarea>
-
-            <div style="margin-top:14px">
-                <button type="submit" class="btn btn-primary">Submit Review</button>
-            </div>
-        </form>
-    </article>
-
-    <!-- Display reviews -->
-    <?php if (!empty($display_reviews)): ?>
-    <div class="review-cards">
-        <?php foreach ($display_reviews as $r): ?>
-        <div class="review-card">
-            <div class="review-header" style="grid-template-columns:1fr auto">
-                <div>
-                    <div class="review-name"><?php echo htmlspecialchars($r['name']); ?></div>
-                    <?php if (!empty($r['trade'])): ?>
-                        <div class="review-trade"><?php echo htmlspecialchars($r['trade']); ?></div>
-                    <?php endif; ?>
-                </div>
-                <div class="review-stars">
-                    <?php echo str_repeat('&#9733;', $r['stars']); ?><?php echo str_repeat('&#9734;', 5 - $r['stars']); ?>
-                </div>
-            </div>
-            <p><?php echo nl2br(htmlspecialchars($r['text'])); ?></p>
-            <div class="review-footer"><?php echo htmlspecialchars($r['date']); ?></div>
+            <a class="btn btn-primary btn-sm" href="index.php#contact">Get a Quote</a>
         </div>
-        <?php endforeach; ?>
     </div>
-    <?php else: ?>
-        <p class="muted">No reviews yet. Be the first!</p>
-    <?php endif; ?>
-
-</div>
+</section>
 
 <?php include 'includes/footer.php'; ?>
