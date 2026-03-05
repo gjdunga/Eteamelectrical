@@ -218,7 +218,7 @@ if (is_dir($hero_dir)) {
 <section class="cta-band">
     <div class="container cta-inner">
         <div class="cta-text">Ready to start your project?</div>
-        <a class="btn btn-inv" href="#contact">Get a Free Estimate</a>
+        <a class="btn btn-inv" href="#contact">Get an Estimate</a>
     </div>
 </section>
 
@@ -244,7 +244,7 @@ if (is_dir($hero_dir)) {
                 </div>
                 <div class="contact-detail">
                     <div class="contact-label">Estimates</div>
-                    <div class="contact-value">Free, no obligation</div>
+                    <div class="contact-value">Available upon appointment</div>
                 </div>
             </div>
             <div class="contact-form-panel">

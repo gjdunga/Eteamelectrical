@@ -133,7 +133,7 @@ include 'includes/header.php';
         <div class="cta-band" style="margin-top:40px;border-radius:0">
             <div class="container cta-inner">
                 <div class="cta-text">Need work done?</div>
-                <a class="btn btn-inv" href="index.php#contact">Get a Free Estimate</a>
+                <a class="btn btn-inv" href="index.php#contact">Get an Estimate</a>
             </div>
         </div>
     </div>
