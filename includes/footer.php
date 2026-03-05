@@ -12,7 +12,7 @@
             </ul>
         </nav>
         <div class="footer-legal">
-            &copy; <?php echo date('Y'); ?> E Team Electrical &bull; Serving All of Colorado &bull; Licensed &amp; Insured
+            &copy; <?php echo date('Y'); ?> E Team Electrical &bull; Serving All of Colorado &bull; Licensed
         </div>
     </div>
 </footer>

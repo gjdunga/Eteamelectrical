@@ -134,7 +134,7 @@ if (is_dir($hero_dir)) {
             </div>
             <div class="stat">
                 <div class="stat-num">100%</div>
-                <div class="stat-label">Licensed &amp; Insured</div>
+                <div class="stat-label">Licensed</div>
             </div>
         </div>
     </div>

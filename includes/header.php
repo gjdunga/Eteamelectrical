@@ -15,7 +15,7 @@
             <div class="brand-mark">E</div>
             <div>
                 <div class="brand-name">E Team Electrical</div>
-                <div class="brand-sub">Licensed &bull; Insured &bull; Colorado</div>
+                <div class="brand-sub">Licensed Licensed &bull; Insured &bull; Coloradobull; Colorado</div>
             </div>
         </a>
 
