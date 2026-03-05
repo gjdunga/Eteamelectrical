@@ -147,29 +147,70 @@ if (is_dir($hero_dir)) {
         <h2 class="section-title reveal reveal-delay-1">Recent Work</h2>
         <p class="section-desc reveal reveal-delay-2">A sample of recent projects. <a href="gallery.php" style="color:var(--orange);text-decoration:underline;font-weight:700">View the full gallery &rarr;</a></p>
 
-        <div class="tiles reveal reveal-delay-3">
-            <?php
-            $photo_dirs = ['FHRBAP','UTA','IPLCCI','IPPM','HTICLD','SIMHWHF','AE','CIMSP','CLFSRP','OGDROR','TSRNL','FYSIL','OFSI'];
-            $preview_count = 0;
-            $max_preview = 6;
-            foreach ($photo_dirs as $dir) {
-                $path = __DIR__ . '/photos/' . $dir;
-                if (!is_dir($path)) continue;
-                $files = array_diff(scandir($path), ['.','..', '.notafile', '.NotaFile', '(1).NotaFile']);
-                foreach ($files as $file) {
-                    if ($preview_count >= $max_preview) break 2;
-                    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                    if (!in_array($ext, ['jpg','jpeg','png','gif','webp'])) continue;
-                    ?>
-                    <a class="tile" href="gallery.php">
-                        <img class="tile-media-img" src="photos/<?php echo htmlspecialchars("$dir/$file"); ?>" alt="Project photo" loading="lazy">
-                    </a>
-                    <?php
-                    $preview_count++;
-                }
+        <?php
+        $photo_dirs = ['FHRBAP','UTA','IPLCCI','IPPM','HTICLD','SIMHWHF','AE','CIMSP','CLFSRP','OGDROR','TSRNL','FYSIL','OFSI'];
+        $all_preview = [];
+        foreach ($photo_dirs as $dir) {
+            $path = __DIR__ . '/photos/' . $dir;
+            if (!is_dir($path)) continue;
+            $files = array_diff(scandir($path), ['.','..', '.notafile', '.NotaFile', '(1).NotaFile']);
+            foreach ($files as $file) {
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                if (!in_array($ext, ['jpg','jpeg','png','gif','webp'])) continue;
+                $all_preview[] = "photos/{$dir}/{$file}";
             }
-            ?>
+        }
+        $per_page = 6;
+        $total_pages = max(1, ceil(count($all_preview) / $per_page));
+        ?>
+
+        <div class="tiles reveal reveal-delay-3" id="preview-grid">
+            <?php for ($i = 0; $i < min($per_page, count($all_preview)); $i++): ?>
+            <a class="tile" href="gallery.php">
+                <img class="tile-media-img" src="<?php echo htmlspecialchars($all_preview[$i]); ?>" alt="Project photo" loading="lazy">
+            </a>
+            <?php endfor; ?>
         </div>
+
+        <?php if (count($all_preview) > $per_page): ?>
+        <div class="preview-pager" id="preview-pager">
+            <button class="pager-btn" id="pager-prev" aria-label="Previous page" disabled>&#8249; Prev</button>
+            <span class="pager-counter"><span id="pager-current">1</span> / <?php echo $total_pages; ?></span>
+            <button class="pager-btn" id="pager-next" aria-label="Next page">Next &#8250;</button>
+        </div>
+
+        <script>
+        (function() {
+            var photos = <?php echo json_encode($all_preview); ?>;
+            var perPage = <?php echo $per_page; ?>;
+            var page = 0;
+            var totalPages = Math.ceil(photos.length / perPage);
+            var grid = document.getElementById('preview-grid');
+            var counter = document.getElementById('pager-current');
+            var btnPrev = document.getElementById('pager-prev');
+            var btnNext = document.getElementById('pager-next');
+
+            function render() {
+                var start = page * perPage;
+                var slice = photos.slice(start, start + perPage);
+                var html = '';
+                for (var i = 0; i < slice.length; i++) {
+                    html += '<a class="tile" href="gallery.php">' +
+                        '<img class="tile-media-img" src="' + slice[i] + '" alt="Project photo" loading="lazy">' +
+                        '</a>';
+                }
+                grid.innerHTML = html;
+                counter.textContent = page + 1;
+                btnPrev.disabled = page === 0;
+                btnNext.disabled = page >= totalPages - 1;
+                grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            btnPrev.addEventListener('click', function() { if (page > 0) { page--; render(); } });
+            btnNext.addEventListener('click', function() { if (page < totalPages - 1) { page++; render(); } });
+        })();
+        </script>
+        <?php endif; ?>
     </div>
 </section>
 

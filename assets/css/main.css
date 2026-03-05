@@ -254,6 +254,19 @@ h1.hero-title{
 }
 .chip:hover,.chip.active{border-color:var(--orange);color:var(--orange);background:var(--orange-dim)}
 
+/* Preview pager */
+.preview-pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
+.pager-btn{
+  padding:12px 28px;border:3px solid var(--text);background:transparent;
+  font-family:var(--display);font-size:1rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text);cursor:pointer;position:relative;overflow:hidden;transition:all .2s ease;
+}
+.pager-btn::after{content:"";position:absolute;inset:0;background:var(--orange);transform:translateX(-101%);transition:transform .25s ease;z-index:-1}
+.pager-btn:hover:not(:disabled){color:#fff;border-color:var(--orange)}
+.pager-btn:hover:not(:disabled)::after{transform:translateX(0)}
+.pager-btn:disabled{opacity:.3;cursor:default;border-color:var(--line)}
+.pager-counter{font-family:var(--mono);font-size:.85rem;letter-spacing:1px;color:var(--text-light);min-width:60px;text-align:center}
+
 /* Slideshow header */
 .slideshow-header{position:relative;overflow:hidden;min-height:400px;background:var(--bg-dark);display:flex;align-items:flex-end}
 .slideshow-bg{position:absolute;inset:0}
