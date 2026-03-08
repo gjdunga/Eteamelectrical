@@ -6,6 +6,7 @@
 <title><?php echo isset($page_title) ? htmlspecialchars($page_title) . ' | ' : ''; ?>E Team Electrical</title>
 <meta name="description" content="E Team Electrical: Journeyman electrician, general contractor, and handyman serving all of Colorado.">
 <link rel="stylesheet" href="assets/css/main.css">
+<script src="https://www.paypal.com/sdk/js?client-id=BAAUFrqYNULUD7oQreRW5hB_60OZrCYozuIvKPiCClKu1k3OkTFP_tIdsrZxX29TsDlCQhsTiuGNg1HlBk&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
 </head>
 <body>
 
