@@ -132,7 +132,7 @@ ul,ol{list-style:none}
 .hero-overline::before{content:"";width:40px;height:3px;background:var(--orange)}
 h1.hero-title{
   font-family:var(--display);font-size:clamp(3.5rem,9vw,8rem);
-  line-height:.92;letter-spacing:3px;text-transform:uppercase;
+  line-height:1.25;letter-spacing:3px;text-transform:uppercase;
   margin-bottom:24px;
 }
 .hero-title .stroke{
