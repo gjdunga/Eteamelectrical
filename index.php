@@ -95,42 +95,42 @@ $hero_images = array_slice($hero_images, 0, 20); // cap at 20 for performance
         <p class="section-desc reveal reveal-delay-2">One crew, every trade. No juggling subcontractors.</p>
 
         <div class="services-grid">
-            <div class="service-card reveal">
+            <a href="services/electrical.php" class="service-card reveal" style="text-decoration:none;color:inherit">
                 <div class="service-num">01</div>
                 <div class="service-bar"></div>
                 <h3>Electrical</h3>
                 <p>Panel upgrades, new circuits, rewires, lighting installs, troubleshooting, and code corrections. Master electrician on every job.</p>
-            </div>
-            <div class="service-card reveal reveal-delay-1">
+            </a>
+            <a href="services/construction.php" class="service-card reveal reveal-delay-1" style="text-decoration:none;color:inherit">
                 <div class="service-num">02</div>
                 <div class="service-bar"></div>
                 <h3>General Construction</h3>
                 <p>New builds, additions, framing, structural repairs, and full project management from permits through punch list.</p>
-            </div>
-            <div class="service-card reveal reveal-delay-2">
+            </a>
+            <a href="services/handyman.php" class="service-card reveal reveal-delay-2" style="text-decoration:none;color:inherit">
                 <div class="service-num">03</div>
                 <div class="service-bar"></div>
                 <h3>Handyman</h3>
                 <p>Small jobs, odd fixes, mounting, patching, door and window installs, drywall. No job too small.</p>
-            </div>
-            <div class="service-card reveal reveal-delay-3">
+            </a>
+            <a href="services/concrete.php" class="service-card reveal reveal-delay-3" style="text-decoration:none;color:inherit">
                 <div class="service-num">04</div>
                 <div class="service-bar"></div>
                 <h3>Concrete</h3>
                 <p>Foundations, slabs, sidewalks, driveways, retaining walls. Graded for drainage, finished clean.</p>
-            </div>
-            <div class="service-card reveal reveal-delay-4">
+            </a>
+            <a href="services/demolition.php" class="service-card reveal reveal-delay-4" style="text-decoration:none;color:inherit">
                 <div class="service-num">05</div>
                 <div class="service-bar"></div>
                 <h3>Demolition &amp; Dirt Work</h3>
                 <p>Controlled teardowns, interior gut jobs, site clearing, grading, trenching, and backfill.</p>
-            </div>
-            <div class="service-card reveal reveal-delay-5">
+            </a>
+            <a href="services/plumbing.php" class="service-card reveal reveal-delay-5" style="text-decoration:none;color:inherit">
                 <div class="service-num">06</div>
                 <div class="service-bar"></div>
                 <h3>Plumbing</h3>
                 <p>Fixture installs, pipe repair, water heaters, drain work, rough-in for new construction and remodels.</p>
-            </div>
+            </a>
         </div>
     </div>
 </section>

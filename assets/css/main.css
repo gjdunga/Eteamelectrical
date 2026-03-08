@@ -202,6 +202,7 @@ h1.hero-title{
 /* ==================== SERVICES ==================== */
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px}
 .service-card{
+  display:block;text-decoration:none;color:inherit;
   padding:36px 28px;border:1px solid var(--line);
   position:relative;overflow:hidden;
   transition:all .25s ease;
@@ -218,6 +219,18 @@ h1.hero-title{
 .service-card p{color:var(--text-light);font-size:.92rem;line-height:1.6}
 .service-bar{width:40px;height:4px;background:var(--orange);margin-bottom:16px;transition:width .3s ease}
 .service-card:hover .service-bar{width:100%}
+
+/* About / Credentials (service pages) */
+.about-grid{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start}
+.about-copy{font-size:1.02rem;line-height:1.7}
+.about-copy p{margin-bottom:12px}
+.credential-list{display:flex;flex-direction:column;gap:12px}
+.credential{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);padding:16px 18px}
+.credential-icon{font-size:1.4rem;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--orange-dim)}
+.credential-text{font-weight:700;color:var(--text);font-size:.95rem}
+.btn-outline{background:transparent;color:var(--text);border-color:var(--line)}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange)}
+.btn-outline::after{background:var(--orange-dim)}
 
 /* ==================== STATS ==================== */
 .stats-strip{
@@ -400,6 +413,7 @@ h1.hero-title{
   .stats-strip{grid-template-columns:1fr 1fr}
   .stat{border-right:none;border-bottom:1px solid var(--line-dark)}
   .contact-split{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
   .tiles{grid-template-columns:1fr 1fr}
   .review-grid{grid-template-columns:1fr}
   .cta-inner{flex-direction:column;text-align:center}

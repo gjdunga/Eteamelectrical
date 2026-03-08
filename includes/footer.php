@@ -5,11 +5,11 @@
         <div class="footer-brand">E Team Electrical</div>
         <nav class="footer-nav">
             <ul class="menu">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="gallery.php">Gallery</a></li>
-                <li><a href="reviews.php">Reviews</a></li>
-                <li><a href="payment.php">Payment</a></li>
-                <li><a href="index.php#contact">Contact</a></li>
+                <li><a href="<?php echo $base; ?>index.php">Home</a></li>
+                <li><a href="<?php echo $base; ?>gallery.php">Gallery</a></li>
+                <li><a href="<?php echo $base; ?>reviews.php">Reviews</a></li>
+                <li><a href="<?php echo $base; ?>payment.php">Payment</a></li>
+                <li><a href="<?php echo $base; ?>index.php#contact">Contact</a></li>
             </ul>
         </nav>
         <div class="footer-legal">
@@ -18,6 +18,6 @@
     </div>
 </footer>
 
-<script src="assets/js/main.js"></script>
+<script src="<?php echo $base; ?>assets/js/main.js"></script>
 </body>
 </html>
