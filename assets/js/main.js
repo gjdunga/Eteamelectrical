@@ -1,17 +1,4 @@
 (function() {
-  // Sticky header background on scroll
-  var header = document.getElementById('site-header');
-  if (header) {
-    var onScroll = function() {
-      if (window.scrollY > 60) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
 
   // Mobile nav toggle
   var toggle = document.getElementById('nav-toggle');

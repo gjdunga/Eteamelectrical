@@ -69,11 +69,9 @@ ul,ol{list-style:none}
 /* ==================== HEADER ==================== */
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  transition:background .3s ease, box-shadow .3s ease;
+  background:#fff;box-shadow:0 2px 20px rgba(0,0,0,.08);
 }
-.site-header.scrolled{background:rgba(245,240,235,.96);backdrop-filter:blur(10px);box-shadow:0 2px 20px rgba(0,0,0,.08)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0;transition:padding .3s ease}
-.site-header.scrolled .header-inner{padding:10px 0}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:16px}
 
 .brand{display:flex;align-items:center;gap:12px}
 .brand-mark{
