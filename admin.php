@@ -94,16 +94,16 @@ body{font-family:'DM Sans',sans-serif;background:#f5f0eb;color:#1a1a1a;line-heig
 .wrap{max-width:900px;margin:0 auto;padding:40px 20px}
 h1{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
 h2{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
-.sub{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:#ff5e1a;margin-bottom:20px}
-a{color:#ff5e1a}
+.sub{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:#6B8E23;margin-bottom:20px}
+a{color:#6B8E23}
 
 /* Login */
 .login-box{max-width:360px;margin:80px auto;background:#fff;border:2px solid #d4cdc4;padding:40px}
 .login-box h1{margin-bottom:4px}
 .login-box input{width:100%;padding:12px;border:2px solid #d4cdc4;font-size:1rem;margin:12px 0;font-family:'DM Sans',sans-serif}
-.login-box input:focus{outline:none;border-color:#ff5e1a}
-.login-box button{width:100%;padding:12px;background:#ff5e1a;color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
-.login-box button:hover{background:#e04d0f}
+.login-box input:focus{outline:none;border-color:#6B8E23}
+.login-box button{width:100%;padding:12px;background:#6B8E23;color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+.login-box button:hover{background:#5a7a1e}
 .err{color:#e03131;font-weight:700;font-size:.9rem}
 
 /* Admin */
@@ -111,35 +111,35 @@ a{color:#ff5e1a}
 .topbar form button{background:none;border:2px solid #d4cdc4;padding:8px 16px;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1px;cursor:pointer;text-transform:uppercase}
 .topbar form button:hover{border-color:#e03131;color:#e03131}
 
-.notice{padding:14px 18px;margin-bottom:20px;font-weight:700;border-left:4px solid #ff5e1a;background:rgba(255,94,26,.06)}
+.notice{padding:14px 18px;margin-bottom:20px;font-weight:700;border-left:4px solid #6B8E23;background:rgba(107,142,35,.06)}
 
 .review{background:#fff;border:2px solid #d4cdc4;padding:24px;margin-bottom:16px;position:relative}
-.review:hover{border-color:#ff5e1a}
+.review:hover{border-color:#6B8E23}
 .review-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .review-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px}
 .review-trade{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:1px;color:#5a5a5a;text-transform:uppercase}
-.review-stars{color:#ff5e1a;font-size:1.1rem;letter-spacing:2px}
+.review-stars{color:#6B8E23;font-size:1.1rem;letter-spacing:2px}
 .review-text{color:#5a5a5a;margin:8px 0}
 .review-date{font-family:'Space Mono',monospace;font-size:.72rem;color:#999;letter-spacing:1px}
 
 .actions{display:flex;gap:8px;margin-top:12px}
 .actions button{padding:8px 16px;font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:2px solid}
 .btn-edit{background:none;border-color:#1a1a1a;color:#1a1a1a}
-.btn-edit:hover{border-color:#ff5e1a;color:#ff5e1a}
+.btn-edit:hover{border-color:#6B8E23;color:#6B8E23}
 .btn-del{background:none;border-color:#e03131;color:#e03131}
 .btn-del:hover{background:#e03131;color:#fff}
 
 /* Edit form */
-.edit-form{display:none;background:#faf8f5;border:2px solid #ff5e1a;padding:20px;margin-top:12px}
+.edit-form{display:none;background:#faf8f5;border:2px solid #6B8E23;padding:20px;margin-top:12px}
 .edit-form.open{display:block}
 .edit-form label{display:block;margin:10px 0 4px;font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:1px;text-transform:uppercase}
 .edit-form input,.edit-form select,.edit-form textarea{width:100%;padding:10px;border:2px solid #d4cdc4;font-family:'DM Sans',sans-serif;font-size:.92rem}
 .edit-form textarea{min-height:80px;resize:vertical}
-.edit-form input:focus,.edit-form select:focus,.edit-form textarea:focus{outline:none;border-color:#ff5e1a}
+.edit-form input:focus,.edit-form select:focus,.edit-form textarea:focus{outline:none;border-color:#6B8E23}
 .edit-actions{display:flex;gap:8px;margin-top:14px}
 .edit-actions button{padding:10px 24px;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:2px solid}
-.btn-save{background:#ff5e1a;color:#fff;border-color:#ff5e1a}
-.btn-save:hover{background:#e04d0f}
+.btn-save{background:#6B8E23;color:#fff;border-color:#6B8E23}
+.btn-save:hover{background:#5a7a1e}
 .btn-cancel{background:none;border-color:#d4cdc4;color:#5a5a5a}
 .btn-cancel:hover{border-color:#1a1a1a;color:#1a1a1a}
 .empty{text-align:center;padding:60px 20px;color:#999}
