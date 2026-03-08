@@ -92,7 +92,7 @@ $hero_images = array_slice($hero_images, 0, 20); // cap at 20 for performance
     <div class="container">
         <div class="section-label reveal">What We Do</div>
         <h2 class="section-title reveal reveal-delay-1">Our Services</h2>
-        <p class="section-desc reveal reveal-delay-2">One crew, every trade. No juggling subcontractors or finger-pointing between teams.</p>
+        <p class="section-desc reveal reveal-delay-2">One crew, every trade. No juggling subcontractors.</p>
 
         <div class="services-grid">
             <div class="service-card reveal">
