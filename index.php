@@ -36,20 +36,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eteam_contact'])) {
 
 include 'includes/header.php';
 
-// Grab a hero image from FHRBAP if available
-$hero_img = '';
-$hero_dir = __DIR__ . '/photos/FHRBAP';
-if (is_dir($hero_dir)) {
-    $imgs = glob($hero_dir . '/*.{jpg,jpeg,png}', GLOB_BRACE);
-    if (!empty($imgs)) $hero_img = 'photos/FHRBAP/' . basename($imgs[array_rand($imgs)]);
+// Collect hero slideshow images from all folders
+$hero_images = [];
+$hero_dirs = ['FHRBAP','UTA','HTICLD','SIMHWHF','IPLCCI','IPPM','AE','OGDROR','CLFSRP','TSRNL','CIMSP','FYSIL','OFSI'];
+foreach ($hero_dirs as $hd) {
+    $hdir = __DIR__ . '/photos/' . $hd;
+    if (!is_dir($hdir)) continue;
+    $himgs = glob($hdir . '/*.{jpg,jpeg,png}', GLOB_BRACE);
+    foreach ($himgs as $hi) {
+        $hero_images[] = 'photos/' . $hd . '/' . basename($hi);
+    }
 }
+shuffle($hero_images);
+$hero_images = array_slice($hero_images, 0, 20); // cap at 20 for performance
 ?>
 
 <!-- HERO -->
 <section class="hero">
     <div class="hero-grid" aria-hidden="true"></div>
-    <?php if ($hero_img): ?>
-    <div class="hero-photo"><img src="<?php echo htmlspecialchars($hero_img); ?>" alt="E Team project photo"></div>
+    <?php if (!empty($hero_images)): ?>
+    <div class="hero-photo">
+        <?php foreach ($hero_images as $hi => $hsrc): ?>
+        <img class="hero-slide<?php echo $hi === 0 ? ' active' : ''; ?>"
+             src="<?php echo htmlspecialchars($hsrc); ?>"
+             alt="E Team project photo"
+             loading="<?php echo $hi < 2 ? 'eager' : 'lazy'; ?>">
+        <?php endforeach; ?>
+        <div class="hero-slide-controls">
+            <button class="hero-slide-btn" id="hero-prev" aria-label="Previous">&#8249;</button>
+            <span class="hero-slide-counter"><span id="hero-cur">1</span> / <?php echo count($hero_images); ?></span>
+            <button class="hero-slide-btn" id="hero-next" aria-label="Next">&#8250;</button>
+            <button class="hero-slide-btn" id="hero-pause" aria-label="Pause">&#10074;&#10074;</button>
+        </div>
+    </div>
     <?php endif; ?>
     <div class="container hero-inner">
         <div class="hero-overline reveal">Journeyman Electrician &bull; General Contractor</div>
@@ -300,5 +319,39 @@ if (is_dir($hero_dir)) {
         </div>
     </div>
 </section>
+
+<?php if (!empty($hero_images) && count($hero_images) > 1): ?>
+<script>
+(function() {
+    var slides = document.querySelectorAll('.hero-slide');
+    var counter = document.getElementById('hero-cur');
+    var total = slides.length, cur = 0, paused = false, timer = null;
+
+    function go(i) {
+        if (i < 0) i = total - 1;
+        if (i >= total) i = 0;
+        slides[cur].classList.remove('active');
+        cur = i;
+        slides[cur].classList.add('active');
+        if (counter) counter.textContent = cur + 1;
+    }
+    function start() { stop(); timer = setInterval(function() { go(cur + 1); }, 4000); }
+    function stop() { if (timer) clearInterval(timer); timer = null; }
+
+    var bp = document.getElementById('hero-prev');
+    var bn = document.getElementById('hero-next');
+    var bx = document.getElementById('hero-pause');
+
+    if (bp) bp.addEventListener('click', function() { go(cur - 1); if (!paused) start(); });
+    if (bn) bn.addEventListener('click', function() { go(cur + 1); if (!paused) start(); });
+    if (bx) bx.addEventListener('click', function() {
+        paused = !paused;
+        bx.innerHTML = paused ? '&#9654;' : '&#10074;&#10074;';
+        if (paused) stop(); else start();
+    });
+    start();
+})();
+</script>
+<?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>
