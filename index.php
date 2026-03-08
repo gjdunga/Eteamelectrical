@@ -71,7 +71,7 @@ $hero_images = array_slice($hero_images, 0, 20); // cap at 20 for performance
     </div>
     <?php endif; ?>
     <div class="container hero-inner">
-        <div class="hero-overline reveal">Journeyman Electrician &bull; General Contractor</div>
+        <div class="hero-overline reveal">Master Electrician &bull; General Contractor</div>
         <h1 class="hero-title reveal reveal-delay-1">Built Right.<br><span class="stroke">Every Time.</span></h1>
         <p class="hero-lede reveal reveal-delay-2">Multi-trade contracting crew serving all of Colorado. Electrical, construction, concrete, demolition, plumbing, and handyman work, all under one call.</p>
         <div class="hero-actions reveal reveal-delay-3">
@@ -99,7 +99,7 @@ $hero_images = array_slice($hero_images, 0, 20); // cap at 20 for performance
                 <div class="service-num">01</div>
                 <div class="service-bar"></div>
                 <h3>Electrical</h3>
-                <p>Panel upgrades, new circuits, rewires, lighting installs, troubleshooting, and code corrections. Journeyman electrician on every job.</p>
+                <p>Panel upgrades, new circuits, rewires, lighting installs, troubleshooting, and code corrections. Master electrician on every job.</p>
             </div>
             <div class="service-card reveal reveal-delay-1">
                 <div class="service-num">02</div>
