@@ -8,6 +8,7 @@
                 <li><a href="index.php">Home</a></li>
                 <li><a href="gallery.php">Gallery</a></li>
                 <li><a href="reviews.php">Reviews</a></li>
+                <li><a href="payment.php">Payment</a></li>
                 <li><a href="index.php#contact">Contact</a></li>
             </ul>
         </nav>

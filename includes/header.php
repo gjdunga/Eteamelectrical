@@ -25,6 +25,7 @@
                 <li<?php if(basename($_SERVER['PHP_SELF'])==='index.php') echo ' class="current-menu-item"'; ?>><a href="index.php">Home</a></li>
                 <li<?php if(basename($_SERVER['PHP_SELF'])==='gallery.php') echo ' class="current-menu-item"'; ?>><a href="gallery.php">Gallery</a></li>
                 <li<?php if(basename($_SERVER['PHP_SELF'])==='reviews.php') echo ' class="current-menu-item"'; ?>><a href="reviews.php">Reviews</a></li>
+                <li<?php if(basename($_SERVER['PHP_SELF'])==='payment.php') echo ' class="current-menu-item"'; ?>><a href="payment.php">Payment</a></li>
                 <li><a href="index.php#contact">Contact</a></li>
             </ul>
         </nav>
